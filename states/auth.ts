@@ -1,6 +1,7 @@
 import { adminSupabase, supabase } from "@/utils/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import { Alert } from "react-native";
 import { z } from "zod";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -16,6 +17,10 @@ export const resetState = () => {
 export const authSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+});
+
+export const forgotSchema = z.object({
+  email: z.string().email(),
 });
 
 interface Profile {
@@ -34,7 +39,8 @@ interface State {
     | "sign-up"
     | "sign-out"
     | "profile"
-    | "delete-account";
+    | "delete-account"
+    | "forgot";
   error: any;
 }
 
@@ -42,6 +48,7 @@ interface Actions {
   setUser: (user: any) => void;
   signIn: (input: z.infer<typeof authSchema>) => Promise<void>;
   signUp: (input: z.infer<typeof authSchema>) => Promise<void>;
+  forgot: (input: z.infer<typeof forgotSchema>) => Promise<void>;
   signOut: () => Promise<void>;
   fetchProfile: () => Promise<void>;
   deleteAccount: () => Promise<void>;
@@ -60,6 +67,19 @@ export const useAuthStore = create(
       resetFns.add(() => set(initialState));
       return {
         ...initialState,
+        forgot: async (input) => {
+          try {
+            set({ loading: "forgot" });
+            const { error } = await supabase.auth.resetPasswordForEmail(
+              input.email
+            );
+            if (error) throw error;
+            Alert.alert("Email enviado", "Verifique sua caixa de entrada.");
+            set({ loading: "none" });
+          } catch (e) {
+            set({ loading: "none", error: e });
+          }
+        },
         fetchProfile: async () => {
           set({ loading: "profile" });
           const { data, error } = await supabase

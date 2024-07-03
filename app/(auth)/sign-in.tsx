@@ -22,6 +22,7 @@ export default function Page() {
     handleSubmit,
     formState: { errors },
     setFocus,
+    getValues,
   } = useForm({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -40,65 +41,87 @@ export default function Page() {
         backgroundColor: theme.colors.background,
         flex: 1,
         paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        justifyContent: "space-between",
       }}
     >
-      <Pressable
-        onPress={() => router.back()}
-        style={{
-          height: 48,
-          width: 48,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Ionicons size={24} name="chevron-back" />
-      </Pressable>
-      <Text
-        style={{ margin: theme.spacing.lg, fontSize: 32, fontWeight: "bold" }}
-      >
-        Entrar
-      </Text>
-      <View
-        style={{
-          gap: theme.spacing.lg,
-          paddingTop: theme.spacing.lg,
-          paddingHorizontal: theme.spacing.lg,
-        }}
-      >
-        <Input
-          controller={{
-            control,
-            name: "email",
-            rules: { required: true },
+      <View>
+        <Pressable
+          onPress={() => router.back()}
+          style={{
+            height: 48,
+            width: 48,
+            alignItems: "center",
+            justifyContent: "center",
           }}
-          label="E-mail"
-          placeholder="nome@exemplo.com"
-          errorMessage={translateAuthErrorMessage(errors.email?.message ?? "")}
-          keyboardType="email-address"
-          onSubmitEditing={() => setFocus("password")}
-          returnKeyType="next"
-          autoCapitalize="none"
-        />
-        <Input
-          controller={{
-            control,
-            name: "password",
-            rules: { required: true },
-          }}
-          label="Senha"
-          placeholder="Digite sua senha"
-          errorMessage={translateAuthErrorMessage(
-            errors?.password?.message || apiError?.message
-          )}
-          secureTextEntry
-        />
-        <Button
-          onPress={handleSubmit(signIn)}
-          loading={loading === "sign-in"}
+        >
+          <Ionicons size={24} name="chevron-back" />
+        </Pressable>
+        <Text
+          style={{ margin: theme.spacing.lg, fontSize: 32, fontWeight: "bold" }}
         >
           Entrar
-        </Button>
+        </Text>
+        <View
+          style={{
+            gap: theme.spacing.lg,
+            paddingTop: theme.spacing.lg,
+            paddingHorizontal: theme.spacing.lg,
+          }}
+        >
+          <Input
+            controller={{
+              control,
+              name: "email",
+              rules: { required: true },
+            }}
+            label="E-mail"
+            placeholder="nome@exemplo.com"
+            errorMessage={translateAuthErrorMessage(
+              errors.email?.message ?? ""
+            )}
+            keyboardType="email-address"
+            onSubmitEditing={() => setFocus("password")}
+            returnKeyType="next"
+            autoCapitalize="none"
+          />
+          <Input
+            controller={{
+              control,
+              name: "password",
+              rules: { required: true },
+            }}
+            label="Senha"
+            placeholder="Digite sua senha"
+            errorMessage={translateAuthErrorMessage(
+              errors?.password?.message || apiError?.message
+            )}
+            secureTextEntry
+          />
+          <Button
+            onPress={handleSubmit(signIn)}
+            loading={loading === "sign-in"}
+          >
+            Entrar
+          </Button>
+          <Button
+            onPress={() =>
+              router.push({
+                pathname: "forgot-password",
+                params: {
+                  email: getValues("email"),
+                },
+              })
+            }
+            variant="ghost"
+          >
+            Esqueceu sua senha?
+          </Button>
+        </View>
       </View>
+      <Button onPress={() => router.push("sign-up")} variant="ghost">
+        Você não tem uma conta?
+      </Button>
     </View>
   );
 }
