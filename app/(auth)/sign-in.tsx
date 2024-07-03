@@ -1,20 +1,20 @@
+import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
 import { authSchema, resetState, useAuthStore } from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
-import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Pressable, Text, View } from "react-native";
+import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
   const insets = useSafeAreaInsets();
   const loading = useAuthStore((state) => state.loading);
-  const signIn = useAuthStore((state) => state.signIn);
+  const signInWithPassword = useAuthStore((state) => state.signInWithPassword);
   const apiError = useAuthStore((state) => state.error);
 
   const {
@@ -46,22 +46,7 @@ export default function Page() {
       }}
     >
       <View>
-        <Pressable
-          onPress={() => router.back()}
-          style={{
-            height: 48,
-            width: 48,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Ionicons size={24} name="chevron-back" />
-        </Pressable>
-        <Text
-          style={{ margin: theme.spacing.lg, fontSize: 32, fontWeight: "bold" }}
-        >
-          Entrar
-        </Text>
+        <AuthHeader title="Entrar" />
         <View
           style={{
             gap: theme.spacing.lg,
@@ -99,8 +84,8 @@ export default function Page() {
             secureTextEntry
           />
           <Button
-            onPress={handleSubmit(signIn)}
-            loading={loading === "sign-in"}
+            onPress={handleSubmit(signInWithPassword)}
+            loading={loading === "sign-in-password"}
           >
             Entrar
           </Button>

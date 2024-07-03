@@ -2,30 +2,29 @@ import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
-import { authSchema, resetState, useAuthStore } from "@/states/auth";
+import { forgotSchema, resetState, useAuthStore } from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
+  const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const loading = useAuthStore((state) => state.loading);
-  const signUp = useAuthStore((state) => state.signUp);
-  const apiError = useAuthStore((state) => state.error);
+  const forgot = useAuthStore((state) => state.forgot);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setFocus,
   } = useForm({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(forgotSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: String(params.email ?? ""),
     },
   });
 
@@ -39,9 +38,10 @@ export default function Page() {
         backgroundColor: theme.colors.background,
         flex: 1,
         paddingTop: insets.top,
+        paddingBottom: insets.bottom,
       }}
     >
-      <AuthHeader title="Criar Conta" />
+      <AuthHeader title="Resetar senha" />
 
       <View
         style={{
@@ -57,28 +57,14 @@ export default function Page() {
             rules: { required: true },
           }}
           label="E-mail"
+          autoFocus
           placeholder="nome@exemplo.com"
-          errorMessage={translateAuthErrorMessage(
-            errors.email?.message || apiError?.message
-          )}
+          errorMessage={translateAuthErrorMessage(errors.email?.message ?? "")}
           keyboardType="email-address"
-          onSubmitEditing={() => setFocus("password")}
-          returnKeyType="next"
           autoCapitalize="none"
         />
-        <Input
-          controller={{
-            control,
-            name: "password",
-            rules: { required: true },
-          }}
-          label="Senha"
-          placeholder="Digite sua senha"
-          errorMessage={translateAuthErrorMessage(errors?.password?.message)}
-          secureTextEntry
-        />
-        <Button onPress={handleSubmit(signUp)} loading={loading === "sign-up"}>
-          Criar Conta
+        <Button onPress={handleSubmit(forgot)} loading={loading === "forgot"}>
+          Enviar e-mail de recuperação
         </Button>
       </View>
     </View>

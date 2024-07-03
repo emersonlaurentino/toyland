@@ -1,14 +1,14 @@
+import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
 import { forgotSchema, resetState, useAuthStore } from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
-import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Pressable, Text, View } from "react-native";
+import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
@@ -41,22 +41,8 @@ export default function Page() {
         paddingBottom: insets.bottom,
       }}
     >
-      <Pressable
-        onPress={() => router.back()}
-        style={{
-          height: 48,
-          width: 48,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Ionicons size={24} name="chevron-back" />
-      </Pressable>
-      <Text
-        style={{ margin: theme.spacing.lg, fontSize: 32, fontWeight: "bold" }}
-      >
-        Esqueceu sua senha?
-      </Text>
+      <AuthHeader title="Esqueceu sua senha?" />
+
       <View
         style={{
           gap: theme.spacing.lg,

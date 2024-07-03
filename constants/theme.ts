@@ -1,5 +1,5 @@
 export const colors = {
-  primary: "#2089dc",
+  primary: "#5D872C",
   gold: "#faad14",
   silver: "silver",
   bronze: "#cd7f32",

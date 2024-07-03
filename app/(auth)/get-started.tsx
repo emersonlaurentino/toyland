@@ -1,45 +1,57 @@
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
-import { Stack, router } from "expo-router";
-import { Image, View } from "react-native";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Image, ImageBackground, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function GetStartedScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View
+    <ImageBackground
+      source={require("../../assets/images/get-started.jpg")}
+      resizeMode="cover"
       style={{
-        backgroundColor: theme.colors.background,
         flex: 1,
-        padding: theme.spacing.xl,
-        paddingBottom: insets.bottom + 20,
+        justifyContent: "space-between",
+        paddingBottom: insets.bottom + theme.spacing.lg,
+        paddingTop: insets.top + theme.spacing.lg,
+        paddingHorizontal: theme.spacing.lg,
       }}
     >
-      <Stack.Screen options={{ headerShown: false }} />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <StatusBar style="light" />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Image
-          source={require("../../assets/images/toyland-icon.png")}
-          style={{ height: 200, aspectRatio: 1 }}
+          source={require("../../assets/images/toyland-logo.png")}
+          style={{
+            height: 96,
+            width: 160,
+          }}
         />
+        {/* <Text
+          style={{
+            fontSize: 40,
+            fontWeight: "bold",
+            color: theme.colors.white,
+          }}
+        >
+          Toyland
+        </Text> */}
       </View>
-      <View
-        style={{
-          flexDirection: "column",
-          gap: 10,
-        }}
-      >
-        <Button onPress={() => router.push("/sign-up")}>Começar Agora</Button>
-        <Button onPress={() => router.push("/sign-in")} variant="secondary">
-          Entrar
-        </Button>
+      <View>
+        <View
+          style={{
+            flexDirection: "column",
+            gap: 10,
+          }}
+        >
+          <Button onPress={() => router.push("/sign-up")}>Começar Agora</Button>
+          <Button onPress={() => router.push("/sign-in")} variant="secondary">
+            Entrar
+          </Button>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }

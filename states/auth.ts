@@ -1,5 +1,6 @@
 import { adminSupabase, supabase } from "@/utils/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
 import { router } from "expo-router";
 import { Alert } from "react-native";
 import { z } from "zod";
@@ -30,12 +31,18 @@ interface Profile {
   avatar_url: string;
 }
 
+interface Tokens {
+  access_token: string;
+  refresh_token: string;
+}
+
 interface State {
   user: any;
   profile: Profile | null;
   loading:
     | "none"
-    | "sign-in"
+    | "sign-in-password"
+    | "sign-in-token"
     | "sign-up"
     | "sign-out"
     | "profile"
@@ -46,7 +53,8 @@ interface State {
 
 interface Actions {
   setUser: (user: any) => void;
-  signIn: (input: z.infer<typeof authSchema>) => Promise<void>;
+  signInWithPassword: (input: z.infer<typeof authSchema>) => Promise<void>;
+  signInWithToken: (tokens: Tokens) => Promise<void>;
   signUp: (input: z.infer<typeof authSchema>) => Promise<void>;
   forgot: (input: z.infer<typeof forgotSchema>) => Promise<void>;
   signOut: () => Promise<void>;
@@ -70,10 +78,15 @@ export const useAuthStore = create(
         forgot: async (input) => {
           try {
             set({ loading: "forgot" });
-            const { error } = await supabase.auth.resetPasswordForEmail(
-              input.email
+            const resetPasswordURL = Linking.createURL(
+              "/(auth)/reset-password"
             );
-            if (error) throw error;
+            console.log('resetPasswordURL', resetPasswordURL);
+            // const { error } = await supabase.auth.resetPasswordForEmail(
+            //   input.email,
+            //   { redirectTo: resetPasswordURL }
+            // );
+            // if (error) throw error;
             Alert.alert("Email enviado", "Verifique sua caixa de entrada.");
             set({ loading: "none" });
           } catch (e) {
@@ -94,9 +107,19 @@ export const useAuthStore = create(
           set({ profile: data, loading: "none" });
         },
         setUser: (user) => set({ user }),
-        signIn: async (input) => {
+        signInWithToken: async (tokens) => {
           try {
-            set({ loading: "sign-in" });
+            set({ loading: "sign-in-token" });
+            await supabase.auth.setSession(tokens);
+            const { data } = await supabase.auth.refreshSession();
+            set({ user: data.user, loading: "none" });
+          } catch (e) {
+            set({ loading: "none", error: e });
+          }
+        },
+        signInWithPassword: async (input) => {
+          try {
+            set({ loading: "sign-in-password" });
             const { data, error } = await supabase.auth.signInWithPassword(
               input
             );
@@ -114,7 +137,7 @@ export const useAuthStore = create(
         },
         signUp: async (input) => {
           try {
-            set({ loading: "sign-in" });
+            set({ loading: "sign-up" });
             const { data, error } = await supabase.auth.signUp(input);
             if (error) {
               set({ loading: "none", error });

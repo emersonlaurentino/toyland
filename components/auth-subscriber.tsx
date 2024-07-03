@@ -1,7 +1,8 @@
 import { supabase } from "@/utils/supabase";
 import { PropsWithChildren, useEffect } from "react";
-import { AppState } from "react-native";
+import { Alert, AppState } from "react-native";
 import { useAuthStore } from "../states/auth";
+import { router } from "expo-router";
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -19,7 +20,12 @@ export function AuthSubscriber({ children }: PropsWithChildren) {
   const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+      // console.log('event', event);
+      // if (event == "PASSWORD_RECOVERY") {
+      //   router.push("/auth/reset-password");
+      // }
+
       setUser(session?.user || null);
     });
 

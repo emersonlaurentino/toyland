@@ -24,3 +24,12 @@ export const adminSupabase = createClient(supabaseUrl, supabaseServiceRoleKey, {
     detectSessionInUrl: false,
   },
 });
+
+export const parseSupabaseUrl = (url: string) => {
+  let parsedUrl = url;
+  if (url.includes("#")) {
+    parsedUrl = url.replace("#", "?");
+  }
+
+  return parsedUrl;
+};

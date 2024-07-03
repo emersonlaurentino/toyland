@@ -49,7 +49,7 @@ export default function Button({
         color: theme.colors.last,
       },
       ghost: {
-        color: theme.colors.primary,
+        color: theme.colors.black,
       },
     },
   };
