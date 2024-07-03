@@ -1,23 +1,18 @@
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { colors } from "@/constants/theme";
 import { Redirect, Tabs } from "expo-router";
 import React from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useAuthStore } from "../../states/auth";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const user = useAuthStore(useShallow((state) => state.user));
-
-  if (!user) {
-    return <Redirect href="/(auth)/get-started" />;
-  }
+  if (!user) return <Redirect href="/(auth)/get-started" />;
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: colors.primary,
         headerShown: false,
       }}
     >
