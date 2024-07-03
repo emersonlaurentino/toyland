@@ -1,5 +1,6 @@
 import theme from "@/constants/theme";
 import Icon from "@expo/vector-icons/FontAwesome6";
+import { useState } from "react";
 import {
   useController,
   type Control,
@@ -38,6 +39,8 @@ export default function Input({
   ...props
 }: Props) {
   const { field } = useController(controller);
+  const [focused, setFocused] = useState(false);
+
   return (
     <View style={{ gap: theme.spacing.md }}>
       {label && (
@@ -50,7 +53,7 @@ export default function Input({
       <View
         style={{
           backgroundColor: theme.colors.background,
-          borderColor: theme.colors.grey5,
+          borderColor: focused ? theme.colors.grey3 : theme.colors.grey5,
           borderWidth: 1,
           paddingHorizontal: 15,
           borderRadius: 10,
@@ -65,6 +68,8 @@ export default function Input({
         )}
         <TextInput
           {...props}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           ref={field.ref}
           onChangeText={field.onChange}
           value={onTransform ? onTransform(field.value) : field.value}
