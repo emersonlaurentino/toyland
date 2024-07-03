@@ -42,17 +42,18 @@ export default function Input({
     <View style={{ gap: theme.spacing.md }}>
       {label && (
         <Text
-          style={{ color: theme.colors.grey2, fontWeight: "500", fontSize: 16 }}
+          style={{ color: theme.colors.black, fontWeight: "500", fontSize: 16 }}
         >
           {label}
         </Text>
       )}
       <View
         style={{
-          backgroundColor: theme.colors.foreground,
+          backgroundColor: theme.colors.background,
+          borderColor: theme.colors.grey5,
+          borderWidth: 1,
           paddingHorizontal: 15,
           borderRadius: 10,
-          borderBottomWidth: 0,
           flexDirection: "row",
           alignItems: "center",
         }}

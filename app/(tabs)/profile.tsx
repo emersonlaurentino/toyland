@@ -1,9 +1,9 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet } from "react-native";
-
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import ProfileSignOut from "@/components/profile/sign-out";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { StyleSheet } from "react-native";
 
 export default function ProfileScreen() {
   return (
@@ -15,6 +15,7 @@ export default function ProfileScreen() {
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Perfil</ThemedText>
+        <ProfileSignOut />
       </ThemedView>
     </ParallaxScrollView>
   );
