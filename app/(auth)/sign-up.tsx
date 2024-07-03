@@ -5,6 +5,7 @@ import theme from "@/constants/theme";
 import { authSchema, resetState, useAuthStore } from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
@@ -39,48 +40,58 @@ export default function Page() {
         backgroundColor: theme.colors.background,
         flex: 1,
         paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        justifyContent: "space-between",
       }}
     >
-      <AuthHeader title="Criar Conta" />
+      <View>
+        <AuthHeader title="Criar Conta" />
 
-      <View
-        style={{
-          gap: theme.spacing.lg,
-          paddingTop: theme.spacing.lg,
-          paddingHorizontal: theme.spacing.lg,
-        }}
-      >
-        <Input
-          controller={{
-            control,
-            name: "email",
-            rules: { required: true },
+        <View
+          style={{
+            gap: theme.spacing.lg,
+            paddingTop: theme.spacing.lg,
+            paddingHorizontal: theme.spacing.lg,
           }}
-          label="E-mail"
-          placeholder="nome@exemplo.com"
-          errorMessage={translateAuthErrorMessage(
-            errors.email?.message || apiError?.message
-          )}
-          keyboardType="email-address"
-          onSubmitEditing={() => setFocus("password")}
-          returnKeyType="next"
-          autoCapitalize="none"
-        />
-        <Input
-          controller={{
-            control,
-            name: "password",
-            rules: { required: true },
-          }}
-          label="Senha"
-          placeholder="Digite sua senha"
-          errorMessage={translateAuthErrorMessage(errors?.password?.message)}
-          secureTextEntry
-        />
-        <Button onPress={handleSubmit(signUp)} loading={loading === "sign-up"}>
-          Criar Conta
-        </Button>
+        >
+          <Input
+            controller={{
+              control,
+              name: "email",
+              rules: { required: true },
+            }}
+            label="E-mail"
+            placeholder="nome@exemplo.com"
+            errorMessage={translateAuthErrorMessage(
+              errors.email?.message || apiError?.message
+            )}
+            keyboardType="email-address"
+            onSubmitEditing={() => setFocus("password")}
+            returnKeyType="next"
+            autoCapitalize="none"
+          />
+          <Input
+            controller={{
+              control,
+              name: "password",
+              rules: { required: true },
+            }}
+            label="Senha"
+            placeholder="Digite sua senha"
+            errorMessage={translateAuthErrorMessage(errors?.password?.message)}
+            secureTextEntry
+          />
+          <Button
+            onPress={handleSubmit(signUp)}
+            loading={loading === "sign-up"}
+          >
+            Criar Conta
+          </Button>
+        </View>
       </View>
+      <Button onPress={() => router.push("sign-in")} variant="ghost">
+        Já tem uma conta? Faça login
+      </Button>
     </View>
   );
 }
