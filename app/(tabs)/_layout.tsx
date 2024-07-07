@@ -1,13 +1,20 @@
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { colors } from "@/constants/theme";
 import { Redirect, Tabs } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useAuthStore } from "../../states/auth";
 
 export default function TabLayout() {
-  const user = useAuthStore(useShallow((state) => state.user));
-  if (!user) return <Redirect href="/(auth)/get-started" />;
+  const token = useAuthStore(useShallow((state) => state.token));
+  const fetchUser = useAuthStore((state) => state.fetchUser);
+  useEffect(() => {
+    if (token) {
+      fetchUser();
+    }
+  }, [token]);
+
+  if (!token) return <Redirect href="/(auth)/get-started" />;
 
   return (
     <Tabs

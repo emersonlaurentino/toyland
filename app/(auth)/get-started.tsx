@@ -46,8 +46,8 @@ export default function GetStartedScreen() {
             gap: 10,
           }}
         >
-          <Button onPress={() => router.push("/sign-up")}>Começar Agora</Button>
-          <Button onPress={() => router.push("/sign-in")} variant="secondary">
+          <Button onPress={() => router.push("/register")}>Começar Agora</Button>
+          <Button onPress={() => router.push("/login")} variant="secondary">
             Entrar
           </Button>
         </View>

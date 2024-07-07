@@ -2,7 +2,7 @@ import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
-import { forgotSchema, resetState, useAuthStore } from "@/states/auth";
+import { resetPasswordSchema, resetState, useAuthStore } from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams } from "expo-router";
@@ -14,15 +14,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function Page() {
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
-  const loading = useAuthStore((state) => state.loading);
-  const forgot = useAuthStore((state) => state.forgot);
+  const loading = useAuthStore((state) => state.loading === "reset-password");
+  const resetPassword = useAuthStore((state) => state.resetPassword);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(forgotSchema),
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       email: String(params.email ?? ""),
     },
@@ -41,7 +41,7 @@ export default function Page() {
         paddingBottom: insets.bottom,
       }}
     >
-      <AuthHeader title="Resetar senha" />
+      <AuthHeader title="Esqueceu sua senha?" />
 
       <View
         style={{
@@ -63,7 +63,7 @@ export default function Page() {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <Button onPress={handleSubmit(forgot)} loading={loading === "forgot"}>
+        <Button onPress={handleSubmit(resetPassword)} loading={loading}>
           Enviar e-mail de recuperação
         </Button>
       </View>

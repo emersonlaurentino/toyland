@@ -2,9 +2,9 @@ import Button from "@/components/ui/button";
 import { useAuthStore } from "@/states/auth";
 import { Alert } from "react-native";
 
-export default function ProfileSignOut() {
-  const signOut = useAuthStore((state) => state.signOut);
-  const loading = useAuthStore((state) => state.loading);
+export default function ProfileLogout() {
+  const logout = useAuthStore((state) => state.logout);
+  const loading = useAuthStore((state) => state.loading === "logout");
 
   return (
     <Button
@@ -13,12 +13,12 @@ export default function ProfileSignOut() {
           {
             text: "Sair",
             style: "destructive",
-            onPress: () => signOut(),
+            onPress: () => logout(),
           },
           { text: "Cancelar", style: "cancel" },
         ])
       }
-      loading={loading === "sign-out"}
+      loading={loading}
       variant="error"
     >
       Sair

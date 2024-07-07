@@ -1,8 +1,5 @@
-import { adminSupabase, supabase } from "@/utils/supabase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Linking from "expo-linking";
 import { router } from "expo-router";
-import { Alert } from "react-native";
 import { z } from "zod";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -15,58 +12,58 @@ export const resetState = () => {
   });
 };
 
-export const authSchema = z.object({
+export const resetPasswordSchema = z.object({
+  email: z.string().min(1).email(),
+});
+
+export const registerSchema = z.object({
+  name: z.string().min(1).max(255),
+  email: z.string().min(1).email(),
+  password: z.string().min(1).max(255),
+});
+
+export const loginWithPasswordSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
 
-export const forgotSchema = z.object({
-  email: z.string().email(),
-});
-
-interface Profile {
+interface User {
   id: string;
-  updated_at: string;
-  full_name: string;
-  avatar_url: string;
-}
-
-interface Tokens {
-  access_token: string;
-  refresh_token: string;
+  createdAt: string;
+  updatedAt: string;
+  name: string;
+  email: string;
+  imageUrl: string | null;
 }
 
 interface State {
-  user: any;
-  profile: Profile | null;
+  token: string | null;
+  user: User | null;
   loading:
     | "none"
-    | "sign-in-password"
-    | "sign-in-token"
-    | "sign-up"
-    | "sign-out"
-    | "profile"
-    | "delete-account"
-    | "forgot";
-  error: any;
+    | "user"
+    | "login-password"
+    | "register"
+    | "logout"
+    | "reset-password";
+  errorMessage?: string;
 }
 
 interface Actions {
-  setUser: (user: any) => void;
-  signInWithPassword: (input: z.infer<typeof authSchema>) => Promise<void>;
-  signInWithToken: (tokens: Tokens) => Promise<void>;
-  signUp: (input: z.infer<typeof authSchema>) => Promise<void>;
-  forgot: (input: z.infer<typeof forgotSchema>) => Promise<void>;
-  signOut: () => Promise<void>;
-  fetchProfile: () => Promise<void>;
-  deleteAccount: () => Promise<void>;
+  loginWithPassword: (
+    input: z.infer<typeof loginWithPasswordSchema>
+  ) => Promise<void>;
+  register: (input: z.infer<typeof registerSchema>) => Promise<void>;
+  fetchUser: () => Promise<void>;
+  logout: () => Promise<void>;
+  resetPassword: (input: z.infer<typeof resetPasswordSchema>) => Promise<void>;
 }
 
 const initialState: State = {
+  token: null,
   user: null,
-  profile: null,
   loading: "none",
-  error: null,
+  errorMessage: undefined,
 };
 
 export const useAuthStore = create(
@@ -75,106 +72,125 @@ export const useAuthStore = create(
       resetFns.add(() => set(initialState));
       return {
         ...initialState,
-        forgot: async (input) => {
+        fetchUser: async () => {
           try {
-            set({ loading: "forgot" });
-            const resetPasswordURL = Linking.createURL(
-              "/(auth)/reset-password"
-            );
-            console.log('resetPasswordURL', resetPasswordURL);
-            // const { error } = await supabase.auth.resetPasswordForEmail(
-            //   input.email,
-            //   { redirectTo: resetPasswordURL }
-            // );
-            // if (error) throw error;
-            Alert.alert("Email enviado", "Verifique sua caixa de entrada.");
-            set({ loading: "none" });
+            set({ loading: "user" });
+            const request = await fetch("https://api.toylandapp.com/user", {
+              headers: {
+                Authorization: `Bearer ${get().token}`,
+              },
+            });
+            const response = await request.json();
+            if (response.error) throw new Error("Usuário não encontrado");
+            set({ user: response });
           } catch (e) {
-            set({ loading: "none", error: e });
-          }
-        },
-        fetchProfile: async () => {
-          set({ loading: "profile" });
-          const { data, error } = await supabase
-            .from("profiles")
-            .select()
-            .eq("id", get().user.id)
-            .single();
-          if (error) {
-            set({ loading: "none" });
-            throw error;
-          }
-          set({ profile: data, loading: "none" });
-        },
-        setUser: (user) => set({ user }),
-        signInWithToken: async (tokens) => {
-          try {
-            set({ loading: "sign-in-token" });
-            await supabase.auth.setSession(tokens);
-            const { data } = await supabase.auth.refreshSession();
-            set({ user: data.user, loading: "none" });
-          } catch (e) {
-            set({ loading: "none", error: e });
-          }
-        },
-        signInWithPassword: async (input) => {
-          try {
-            set({ loading: "sign-in-password" });
-            const { data, error } = await supabase.auth.signInWithPassword(
-              input
-            );
-            if (error) {
-              set({ loading: "none", error });
-            } else if (data.session) {
-              set({ user: data.user });
-              await get().fetchProfile();
-              router.replace("/");
+            if (e instanceof Error) {
+              set({ errorMessage: e.message });
+            } else {
+              set({ errorMessage: "Erro desconhecido" });
             }
+          } finally {
             set({ loading: "none" });
-          } catch (e) {
-            set({ loading: "none", error: e });
           }
         },
-        signUp: async (input) => {
+        loginWithPassword: async (input) => {
           try {
-            set({ loading: "sign-up" });
-            const { data, error } = await supabase.auth.signUp(input);
-            if (error) {
-              set({ loading: "none", error });
-            } else if (data.session) {
-              set({ user: data.user });
-              router.replace("/");
-            }
-            set({ loading: "none" });
-          } catch (e) {
-            set({ loading: "none", error: e });
-          }
-        },
-        signOut: async () => {
-          try {
-            set({ loading: "sign-out" });
-            const { error } = await adminSupabase.auth.signOut();
-            if (error) throw error;
-            router.replace("/(auth)/get-started");
-            set(initialState);
-            useAuthStore.persist.clearStorage();
-          } catch (error) {
-            console.error("signOut error", error);
-            set({ loading: "none", error });
-          }
-        },
-        deleteAccount: async () => {
-          try {
-            set({ loading: "delete-account" });
-            const { error } = await adminSupabase.auth.admin.deleteUser(
-              get().user.id
+            set({ loading: "login-password" });
+            const request = await fetch(
+              "https://api.toylandapp.com/auth/login",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(input),
+              }
             );
-            if (error) throw error;
-            router.replace("/(auth)/get-started");
-            set(initialState);
-            useAuthStore.persist.clearStorage();
-          } catch (error) {
-            set({ loading: "none", error });
+            const response = await request.json();
+            if (response.error) throw new Error(response.error);
+            set({ token: response.token });
+            router.replace("/");
+          } catch (e) {
+            if (e instanceof Error) {
+              set({ errorMessage: e.message });
+            } else {
+              set({ errorMessage: "Erro desconhecido" });
+            }
+          } finally {
+            set({ loading: "none" });
+          }
+        },
+        register: async (input) => {
+          try {
+            set({ loading: "register" });
+            const request = await fetch(
+              "https://api.toylandapp.com/auth/register",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(input),
+              }
+            );
+            const response = await request.json();
+            if (response.error) throw new Error(response.error);
+            set({ token: response.token });
+            router.replace("/");
+          } catch (e) {
+            if (e instanceof Error) {
+              set({ errorMessage: e.message });
+            } else {
+              set({ errorMessage: "Erro desconhecido" });
+            }
+          } finally {
+            set({ loading: "none" });
+          }
+        },
+        logout: async () => {
+          try {
+            set({ loading: "logout" });
+            await fetch("https://api.toylandapp.com/auth/logout", {
+              headers: {
+                Authorization: `Bearer ${get().token}`,
+              },
+            });
+            set({ token: null, user: null });
+            await AsyncStorage.removeItem("auth");
+          } catch (e) {
+            if (e instanceof Error) {
+              set({ errorMessage: e.message });
+            } else {
+              set({ errorMessage: "Erro desconhecido" });
+            }
+          } finally {
+            set({ loading: "none" });
+          }
+        },
+        resetPassword: async (input) => {
+          try {
+            set({ loading: "reset-password" });
+            const request = await fetch(
+              "https://api.toylandapp.com/auth/reset-password",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(input),
+              }
+            );
+            const response = await request.json();
+            if (response.error) throw new Error(response.error);
+            router.replace("/(auth)/reset-password-waiting");
+          } catch (e) {
+            if (e instanceof Error) {
+              set({ errorMessage: e.message });
+            } else {
+              set({ errorMessage: "Erro desconhecido" });
+            }
+          } finally {
+            set({ loading: "none" });
           }
         },
       };

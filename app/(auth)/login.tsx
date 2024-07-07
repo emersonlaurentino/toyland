@@ -2,7 +2,11 @@ import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
-import { authSchema, resetState, useAuthStore } from "@/states/auth";
+import {
+  loginWithPasswordSchema,
+  resetState,
+  useAuthStore,
+} from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
@@ -13,9 +17,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
   const insets = useSafeAreaInsets();
-  const loading = useAuthStore((state) => state.loading);
-  const signInWithPassword = useAuthStore((state) => state.signInWithPassword);
-  const apiError = useAuthStore((state) => state.error);
+  const loading = useAuthStore((state) => state.loading === "login-password");
+  const loginWithPassword = useAuthStore((state) => state.loginWithPassword);
+  const errorMessage = useAuthStore((state) => state.errorMessage);
 
   const {
     control,
@@ -24,7 +28,7 @@ export default function Page() {
     setFocus,
     getValues,
   } = useForm({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(loginWithPasswordSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -79,20 +83,17 @@ export default function Page() {
             label="Senha"
             placeholder="Digite sua senha"
             errorMessage={translateAuthErrorMessage(
-              errors?.password?.message || apiError?.message
+              errors?.password?.message || errorMessage
             )}
             secureTextEntry
           />
-          <Button
-            onPress={handleSubmit(signInWithPassword)}
-            loading={loading === "sign-in-password"}
-          >
+          <Button onPress={handleSubmit(loginWithPassword)} loading={loading}>
             Entrar
           </Button>
           <Button
             onPress={() =>
               router.push({
-                pathname: "forgot-password",
+                pathname: "reset-password",
                 params: {
                   email: getValues("email"),
                 },
@@ -104,7 +105,7 @@ export default function Page() {
           </Button>
         </View>
       </View>
-      <Button onPress={() => router.push("sign-up")} variant="ghost">
+      <Button onPress={() => router.push("register")} variant="ghost">
         Você não tem uma conta?
       </Button>
     </View>
