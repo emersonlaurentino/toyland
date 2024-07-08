@@ -27,7 +27,7 @@ export default function AuthHeader(props: Props) {
         style={{
           margin: theme.spacing.lg,
           fontSize: 32,
-          fontFamily: "Itim",
+          fontFamily: "QuicksandBold",
         }}
       >
         {props.title}

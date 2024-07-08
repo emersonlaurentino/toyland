@@ -16,7 +16,9 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    Itim: require("../assets/fonts/Itim-Regular.ttf"),
+    Quicksand: require("../assets/fonts/Quicksand-Regular.ttf"),
+    QuicksandBold: require("../assets/fonts/Quicksand-Bold.ttf"),
+    QuicksandMedium: require("../assets/fonts/Quicksand-Medium.ttf"),
   });
 
   useEffect(() => {

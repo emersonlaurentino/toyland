@@ -1,8 +1,11 @@
 import theme from "@/constants/theme";
+import { Ionicons } from "@expo/vector-icons";
+import { type ComponentProps } from "react";
 import {
   ActivityIndicator,
   Pressable,
   Text,
+  View,
   type PressableProps,
   type TextProps,
 } from "react-native";
@@ -11,8 +14,9 @@ interface ButtonProps
   extends Omit<PressableProps, "children">,
     Pick<TextProps, "children"> {
   loading?: boolean;
-  variant?: "primary" | "secondary" | "error" | "ghost";
+  variant?: "primary" | "secondary" | "error" | "ghost" | "outline";
   size?: "sm" | "md" | "lg";
+  icon?: ComponentProps<typeof Ionicons>["name"];
 }
 
 export default function Button({
@@ -39,6 +43,11 @@ export default function Button({
       ghost: {
         backgroundColor: "transparent",
       },
+      outline: {
+        backgroundColor: "transparent",
+        borderWidth: 1,
+        borderColor: theme.colors.border,
+      },
     },
     content: {
       primary: {
@@ -51,6 +60,9 @@ export default function Button({
         color: theme.colors.last,
       },
       ghost: {
+        color: theme.colors.black,
+      },
+      outline: {
         color: theme.colors.black,
       },
     },
@@ -76,6 +88,7 @@ export default function Button({
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: theme.spacing.lg,
+          flexDirection: "row",
         },
         styles.container[variant],
         styles.sizes[size],
@@ -85,11 +98,24 @@ export default function Button({
       {loading ? (
         <ActivityIndicator color={styles.content[variant].color} />
       ) : (
-        <Text
-          style={[{ fontSize: 16, fontWeight: "500" }, styles.content[variant]]}
-        >
-          {children}
-        </Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {props.icon && (
+            <Ionicons
+              size={20}
+              name={props.icon}
+              color={styles.content[variant].color}
+            />
+          )}
+          {props.icon && <View style={{ width: theme.spacing.sm }} />}
+          <Text
+            style={[
+              { fontSize: 16, fontFamily: "QuicksandBold" },
+              styles.content[variant],
+            ]}
+          >
+            {children}
+          </Text>
+        </View>
       )}
     </Pressable>
   );
