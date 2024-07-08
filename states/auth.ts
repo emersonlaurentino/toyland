@@ -81,6 +81,11 @@ export const useAuthStore = create(
               },
             });
             const response = await request.json();
+
+            if (response.error === "Unauthorized") {
+              return await get().logout();
+            }
+
             if (response.error) throw new Error("Usuário não encontrado");
             set({ user: response });
           } catch (e) {

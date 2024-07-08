@@ -12,12 +12,14 @@ interface ButtonProps
     Pick<TextProps, "children"> {
   loading?: boolean;
   variant?: "primary" | "secondary" | "error" | "ghost";
+  size?: "sm" | "md" | "lg";
 }
 
 export default function Button({
   loading,
   children,
   variant = "primary",
+  size = "md",
   style,
   ...props
 }: ButtonProps) {
@@ -52,6 +54,17 @@ export default function Button({
         color: theme.colors.black,
       },
     },
+    sizes: {
+      sm: {
+        height: 32,
+      },
+      md: {
+        height: 48,
+      },
+      lg: {
+        height: 64,
+      },
+    },
   };
 
   return (
@@ -59,13 +72,13 @@ export default function Button({
       {...props}
       style={[
         {
-          borderRadius: 10,
-          height: 48,
+          borderRadius: theme.spacing.lg,
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: theme.spacing.lg,
         },
         styles.container[variant],
+        styles.sizes[size],
         styleObj,
       ]}
     >

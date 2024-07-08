@@ -24,7 +24,11 @@ export default function AuthHeader(props: Props) {
         <Ionicons size={24} name="chevron-back" />
       </Pressable>
       <Text
-        style={{ margin: theme.spacing.lg, fontSize: 32, fontWeight: "bold" }}
+        style={{
+          margin: theme.spacing.lg,
+          fontSize: 32,
+          fontFamily: "Itim",
+        }}
       >
         {props.title}
       </Text>
