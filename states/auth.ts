@@ -34,6 +34,21 @@ interface User {
   name: string;
   email: string;
   imageUrl: string | null;
+  products: Products;
+}
+
+interface Products {
+  inventory: Product[];
+  givingAway: Product[];
+  history: Product[];
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string | null;
+  status: string;
+  images: string[];
 }
 
 interface State {
@@ -75,11 +90,14 @@ export const useAuthStore = create(
         fetchUser: async () => {
           try {
             set({ loading: "user" });
-            const request = await fetch("https://api.toylandapp.com/user", {
-              headers: {
-                Authorization: `Bearer ${get().token}`,
-              },
-            });
+            const request = await fetch(
+              "https://api.toylandapp.com/user/profile",
+              {
+                headers: {
+                  Authorization: `Bearer ${get().token}`,
+                },
+              }
+            );
             const response = await request.json();
 
             if (response.error === "Unauthorized") {

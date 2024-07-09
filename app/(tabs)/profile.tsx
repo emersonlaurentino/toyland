@@ -85,26 +85,21 @@ function TabItem({ title, count, selected, onPress }: TabItemProps) {
   );
 }
 
-const TABS = [
-  {
-    id: "inventory",
-    title: "Inventário",
-    count: "8",
-  },
-  {
-    id: "giving-away",
-    title: "Desapegando",
-    count: "0",
-  },
-  {
-    id: "history",
-    title: "Histórico",
-  },
-];
+const TABS: { [key: string]: string } = {
+  inventory: "Inventário",
+  givingAway: "Desapegando",
+  history: "Histórico",
+};
 
 export default function ProfileScreen() {
   const user = useAuthStore((state) => state.user);
   const [selectedTab, setSelectedTab] = useState("inventory");
+
+  const tabs = Object.keys(user?.products || {}).map((key) => ({
+    id: key,
+    title: TABS[key],
+    count: String((user?.products as any)[key].length),
+  }));
 
   return (
     <FlatList
@@ -154,6 +149,7 @@ export default function ProfileScreen() {
               </View>
             </Pressable>
           </View>
+
           <View
             style={{
               flexDirection: "row",
@@ -205,6 +201,7 @@ export default function ProfileScreen() {
               {user?.name}
             </Text>
           </View>
+
           <Button
             style={{ margin: theme.spacing.lg, marginTop: 0 }}
             variant="outline"
@@ -215,7 +212,7 @@ export default function ProfileScreen() {
 
           <FlatList
             contentContainerStyle={{ paddingHorizontal: theme.spacing.lg }}
-            data={TABS}
+            data={tabs}
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id}
             horizontal
