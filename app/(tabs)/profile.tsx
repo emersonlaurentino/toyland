@@ -4,7 +4,6 @@ import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
 import { useAuthStore } from "@/states/auth";
 import { formatDataGrid } from "@/utils/format-data-grid";
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
@@ -89,8 +88,8 @@ export default function ProfileScreen() {
           <Header
             title="Perfil"
             actionColor="#999"
-            actionIcon="settings"
-            onAction={() => {}}
+            actionIcon="settings-outline"
+            onAction={() => router.push("/(settings)/settings")}
           />
 
           <View
@@ -150,8 +149,6 @@ export default function ProfileScreen() {
           <Button
             style={{ margin: theme.spacing.lg, marginTop: 0 }}
             variant="outline"
-            icon="add-circle"
-            iconSize={24}
             onPress={() => router.push("/(product)/new")}
           >
             Novo Produto

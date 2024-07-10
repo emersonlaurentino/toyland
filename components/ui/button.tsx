@@ -50,6 +50,7 @@ export default function Button({
         backgroundColor: "transparent",
         borderWidth: 1,
         borderColor: theme.colors.border,
+        borderBottomWidth: 4,
       },
     },
     content: {
@@ -66,7 +67,7 @@ export default function Button({
         color: theme.colors.black,
       },
       outline: {
-        color: theme.colors.black,
+        color: theme.colors.primary,
       },
     },
     sizes: {

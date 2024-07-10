@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 export default function Screen() {
   return (
     <View style={{ flex: 1 }}>
-      <Header title="Novo Produto" canBack />
+      <Header title="Perfil" canBack />
       <Text>Screen</Text>
     </View>
   );

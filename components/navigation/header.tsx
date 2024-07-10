@@ -33,28 +33,16 @@ export default function Header(props: Props) {
             width: 48,
             alignItems: "center",
             justifyContent: "center",
-            marginLeft: -8,
+            marginLeft: -theme.spacing.lg,
           }}
         >
-          <View
-            style={{
-              borderColor: theme.colors.border,
-              borderWidth: 1,
-              borderRadius: theme.spacing.md,
-              height: 32,
-              width: 32,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Ionicons size={20} name="chevron-back" color="#999" />
-          </View>
+          <Ionicons size={24} name="arrow-back" color="#999" />
         </Pressable>
       ) : null}
       <Text
         style={{
           fontFamily: "QuicksandBold",
-          fontSize: 18,
+          fontSize: 20,
         }}
       >
         {props.title}
@@ -67,29 +55,17 @@ export default function Header(props: Props) {
             width: 48,
             alignItems: "center",
             justifyContent: "center",
-            marginRight: -8,
+            marginRight: -theme.spacing.lg,
           }}
         >
-          <View
-            style={{
-              borderColor: theme.colors.border,
-              borderWidth: 1,
-              borderRadius: theme.spacing.md,
-              height: 32,
-              width: 32,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Ionicons
-              size={20}
-              name={props.actionIcon}
-              color={props.actionColor}
-            />
-          </View>
+          <Ionicons
+            size={24}
+            name={props.actionIcon}
+            color={props.actionColor}
+          />
         </Pressable>
       ) : (
-        <View style={{ width: 40 }} />
+        <View style={{ width: 48, marginRight: -theme.spacing.lg }} />
       )}
     </View>
   );
