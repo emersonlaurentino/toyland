@@ -17,6 +17,7 @@ interface ButtonProps
   variant?: "primary" | "secondary" | "error" | "ghost" | "outline";
   size?: "sm" | "md" | "lg";
   icon?: ComponentProps<typeof Ionicons>["name"];
+  iconSize?: ComponentProps<typeof Ionicons>["size"];
 }
 
 export default function Button({
@@ -25,6 +26,8 @@ export default function Button({
   variant = "primary",
   size = "md",
   style,
+  iconSize,
+  icon,
   ...props
 }: ButtonProps) {
   const styleObj = typeof style === "object" ? style : {};
@@ -99,14 +102,14 @@ export default function Button({
         <ActivityIndicator color={styles.content[variant].color} />
       ) : (
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          {props.icon && (
+          {icon && (
             <Ionicons
-              size={20}
-              name={props.icon}
+              size={iconSize ?? 20}
+              name={icon}
               color={styles.content[variant].color}
             />
           )}
-          {props.icon && <View style={{ width: theme.spacing.sm }} />}
+          {icon && <View style={{ width: theme.spacing.sm }} />}
           <Text
             style={[
               { fontSize: 16, fontFamily: "QuicksandBold" },

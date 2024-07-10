@@ -1,9 +1,11 @@
+import Header from "@/components/navigation/header";
 import ProductItem from "@/components/product-item";
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
 import { useAuthStore } from "@/states/auth";
 import { formatDataGrid } from "@/utils/format-data-grid";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 
@@ -84,50 +86,12 @@ export default function ProfileScreen() {
     <FlatList
       ListHeaderComponent={
         <View>
-          <View
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: theme.colors.border,
-              height: 48,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingHorizontal: theme.spacing.lg,
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "QuicksandBold",
-                fontSize: 20,
-              }}
-            >
-              Perfil
-            </Text>
-            <Pressable
-              // onPress={() => router.back()}
-              style={{
-                height: 48,
-                width: 48,
-                alignItems: "center",
-                justifyContent: "center",
-                marginRight: -8,
-              }}
-            >
-              <View
-                style={{
-                  borderColor: theme.colors.border,
-                  borderWidth: 1,
-                  borderRadius: theme.spacing.md,
-                  height: 32,
-                  width: 32,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons size={20} name="notifications" color="#999" />
-              </View>
-            </Pressable>
-          </View>
+          <Header
+            title="Perfil"
+            actionColor="#999"
+            actionIcon="settings"
+            onAction={() => {}}
+          />
 
           <View
             style={{
@@ -174,7 +138,7 @@ export default function ProfileScreen() {
             <Text
               style={{
                 fontFamily: "QuicksandBold",
-                fontSize: 28,
+                fontSize: 24,
                 flex: 1,
               }}
               numberOfLines={2}
@@ -186,9 +150,11 @@ export default function ProfileScreen() {
           <Button
             style={{ margin: theme.spacing.lg, marginTop: 0 }}
             variant="outline"
-            icon="settings"
+            icon="add-circle"
+            iconSize={24}
+            onPress={() => router.push("/(product)/new")}
           >
-            Configurações
+            Novo Produto
           </Button>
 
           <FlatList

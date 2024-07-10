@@ -1,10 +1,10 @@
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { colors } from "@/constants/theme";
+import theme from "@/constants/theme";
 import { Redirect, Tabs } from "expo-router";
 import React, { useEffect } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useShallow } from "zustand/react/shallow";
 import { useAuthStore } from "../../states/auth";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
@@ -21,17 +21,17 @@ export default function TabLayout() {
   return (
     <Tabs
       sceneContainerStyle={{
-        backgroundColor: colors.background,
+        backgroundColor: theme.colors.background,
         paddingTop: insets.top,
       }}
       screenOptions={{
-        tabBarActiveTintColor: colors.primary,
+        tabBarActiveTintColor: theme.colors.primary,
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: colors.background,
+          backgroundColor: theme.colors.background,
           borderTopWidth: 1,
-          borderTopColor: colors.border,
+          borderTopColor: theme.colors.border,
           elevation: 0,
           shadowOpacity: 0,
         },
