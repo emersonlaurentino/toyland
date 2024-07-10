@@ -1,32 +1,11 @@
+import ProductItem from "@/components/product-item";
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
 import { useAuthStore } from "@/states/auth";
+import { formatDataGrid } from "@/utils/format-data-grid";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
-
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-];
-
-type ItemProps = { title: string };
-
-const Item = ({ title }: ItemProps) => (
-  <View>
-    <Text>{title}</Text>
-  </View>
-);
 
 type TabItemProps = {
   title: string;
@@ -227,8 +206,44 @@ export default function ProfileScreen() {
           />
         </View>
       }
-      data={DATA}
-      renderItem={({ item }) => <Item title={item.title} />}
+      data={formatDataGrid((user?.products as any)[selectedTab], 2)}
+      numColumns={2}
+      contentContainerStyle={
+        tabs.find((item) => item.id === selectedTab)?.count === "0"
+          ? { flex: 1 }
+          : {}
+      }
+      columnWrapperStyle={{
+        paddingHorizontal: theme.spacing.lg,
+        paddingVertical: theme.spacing.lg,
+        gap: theme.spacing.lg,
+      }}
+      renderItem={({ item }) => {
+        if (item.empty) return <View style={{ flex: 1 }} />;
+        return <ProductItem {...item} />;
+      }}
+      ListEmptyComponent={
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: theme.spacing.lg,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "QuicksandBold",
+              fontSize: 16,
+              color: theme.colors.grey3,
+            }}
+          >
+            {`Nenhum produto ${
+              selectedTab === "givingAway" ? "para desapegar" : ""
+            }`}
+          </Text>
+        </View>
+      }
       keyExtractor={(item) => item.id}
     />
   );
