@@ -175,7 +175,9 @@ export default function ProfileScreen() {
               style={{
                 fontFamily: "QuicksandBold",
                 fontSize: 28,
+                flex: 1,
               }}
+              numberOfLines={2}
             >
               {user?.name}
             </Text>
