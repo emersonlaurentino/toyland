@@ -14,7 +14,7 @@ export default function Header(props: Props) {
   return (
     <View
       style={{
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderBottomColor: theme.colors.border,
         height: 48,
         flexDirection: "row",

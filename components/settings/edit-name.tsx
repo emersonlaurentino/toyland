@@ -74,7 +74,7 @@ export default function EditName(props: Props) {
         style={{
           fontFamily: "QuicksandBold",
           fontSize: 16,
-          borderWidth: 1,
+          borderWidth: 2,
           borderColor: theme.colors.border,
           padding: theme.spacing.lg,
           borderRadius: theme.spacing.lg,

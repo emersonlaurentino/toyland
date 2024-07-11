@@ -56,8 +56,8 @@ export default function Screen() {
           <Pressable
             onPress={item.onAction}
             style={{
-              borderWidth: 1,
-              borderBottomWidth: index === DATA.length - 1 ? 1 : 0,
+              borderWidth: 2,
+              borderBottomWidth: index === DATA.length - 1 ? 2 : 0,
               borderColor: theme.colors.border,
               borderTopEndRadius: index === 0 ? theme.spacing.lg : 0,
               borderTopStartRadius: index === 0 ? theme.spacing.lg : 0,

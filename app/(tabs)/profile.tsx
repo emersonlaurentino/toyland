@@ -5,7 +5,7 @@ import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
 import { useAuthStore } from "@/states/auth";
 import { formatDataGrid } from "@/utils/format-data-grid";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
@@ -20,12 +20,12 @@ type TabItemProps = {
 function TabItem({ title, count, selected, onPress }: TabItemProps) {
   const selectedStyle = selected
     ? {
-        borderBottomWidth: 2,
+        borderBottomWidth: 3,
         borderBottomColor: theme.colors.primary,
       }
     : {
         paddingBottom: theme.spacing.md + 1,
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderBottomColor: theme.colors.border,
       };
 
@@ -84,119 +84,120 @@ export default function ProfileScreen() {
   }));
 
   return (
-    <FlatList
-      ListHeaderComponent={
-        <View>
-          <Header
-            title="Perfil"
-            action={
-              <Pressable
-                onPress={() => router.push("/(settings)/settings")}
+    <View style={{ flex: 1 }}>
+      <Header
+        title="Perfil"
+        action={
+          <Pressable
+            onPress={() => router.push("/(settings)/settings")}
+            style={{
+              height: 48,
+              width: 48,
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: -theme.spacing.lg,
+            }}
+          >
+            <Feather size={24} name="settings" color="#999" />
+          </Pressable>
+        }
+      />
+      <FlatList
+        ListHeaderComponent={
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: theme.spacing.lg,
+                padding: theme.spacing.lg,
+              }}
+            >
+              <ProfileImage
+                source={
+                  user?.imageUrl
+                    ? { uri: `https://assets.toylandapp.com/${user?.imageUrl}` }
+                    : undefined
+                }
+                alt={user?.name.charAt(0)}
+              />
+              <Text
                 style={{
-                  height: 48,
-                  width: 48,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginRight: -theme.spacing.lg,
+                  fontFamily: "QuicksandBold",
+                  fontSize: 24,
+                  flex: 1,
                 }}
+                numberOfLines={2}
               >
-                <Ionicons size={24} name="settings-outline" color="#999" />
-              </Pressable>
-            }
-          />
+                {user?.name}
+              </Text>
+            </View>
 
+            <Button
+              style={{ margin: theme.spacing.lg, marginTop: 0 }}
+              variant="outline"
+              onPress={() => router.push("/(product)/new")}
+            >
+              Novo Produto
+            </Button>
+
+            <FlatList
+              contentContainerStyle={{ paddingHorizontal: theme.spacing.lg }}
+              data={tabs}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.id}
+              horizontal
+              renderItem={({ item }) => (
+                <TabItem
+                  title={item.title}
+                  count={item.count}
+                  selected={selectedTab === item.id}
+                  onPress={() => setSelectedTab(item.id)}
+                />
+              )}
+            />
+          </View>
+        }
+        data={formatDataGrid((user?.products as any)[selectedTab], 2)}
+        numColumns={2}
+        contentContainerStyle={
+          tabs.find((item) => item.id === selectedTab)?.count === "0"
+            ? { flex: 1 }
+            : {}
+        }
+        columnWrapperStyle={{
+          paddingHorizontal: theme.spacing.lg,
+          paddingVertical: theme.spacing.lg,
+          gap: theme.spacing.lg,
+        }}
+        renderItem={({ item }) => {
+          if (item.empty) return <View style={{ flex: 1 }} />;
+          return <ProductItem {...item} />;
+        }}
+        ListEmptyComponent={
           <View
             style={{
-              flexDirection: "row",
+              flex: 1,
+              justifyContent: "center",
               alignItems: "center",
-              gap: theme.spacing.lg,
               padding: theme.spacing.lg,
             }}
           >
-            <ProfileImage
-              source={
-                user?.imageUrl
-                  ? { uri: `https://assets.toylandapp.com/${user?.imageUrl}` }
-                  : undefined
-              }
-              alt={user?.name.charAt(0)}
-            />
             <Text
               style={{
                 fontFamily: "QuicksandBold",
-                fontSize: 24,
-                flex: 1,
+                fontSize: 16,
+                color: theme.colors.grey3,
               }}
-              numberOfLines={2}
             >
-              {user?.name}
+              {`Nenhum produto ${
+                selectedTab === "givingAway" ? "para desapegar" : ""
+              }`}
             </Text>
           </View>
-
-          <Button
-            style={{ margin: theme.spacing.lg, marginTop: 0 }}
-            variant="outline"
-            onPress={() => router.push("/(product)/new")}
-          >
-            Novo Produto
-          </Button>
-
-          <FlatList
-            contentContainerStyle={{ paddingHorizontal: theme.spacing.lg }}
-            data={tabs}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
-            horizontal
-            renderItem={({ item }) => (
-              <TabItem
-                title={item.title}
-                count={item.count}
-                selected={selectedTab === item.id}
-                onPress={() => setSelectedTab(item.id)}
-              />
-            )}
-          />
-        </View>
-      }
-      data={formatDataGrid((user?.products as any)[selectedTab], 2)}
-      numColumns={2}
-      contentContainerStyle={
-        tabs.find((item) => item.id === selectedTab)?.count === "0"
-          ? { flex: 1 }
-          : {}
-      }
-      columnWrapperStyle={{
-        paddingHorizontal: theme.spacing.lg,
-        paddingVertical: theme.spacing.lg,
-        gap: theme.spacing.lg,
-      }}
-      renderItem={({ item }) => {
-        if (item.empty) return <View style={{ flex: 1 }} />;
-        return <ProductItem {...item} />;
-      }}
-      ListEmptyComponent={
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            padding: theme.spacing.lg,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "QuicksandBold",
-              fontSize: 16,
-              color: theme.colors.grey3,
-            }}
-          >
-            {`Nenhum produto ${
-              selectedTab === "givingAway" ? "para desapegar" : ""
-            }`}
-          </Text>
-        </View>
-      }
-      keyExtractor={(item) => item.id}
-    />
+        }
+        keyExtractor={(item) => item.id}
+      />
+    </View>
   );
 }

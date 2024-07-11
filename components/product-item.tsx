@@ -10,7 +10,7 @@ function ProductItem(product: Product) {
         flex: 1,
         padding: theme.spacing.sm,
         borderRadius: theme.spacing.lg,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: theme.colors.border,
       }}
     >

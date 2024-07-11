@@ -26,11 +26,12 @@ export default function TabLayout() {
       }}
       screenOptions={{
         tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.grey3,
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: theme.colors.background,
-          borderTopWidth: 1,
+          borderTopWidth: 2,
           borderTopColor: theme.colors.border,
           elevation: 0,
           shadowOpacity: 0,

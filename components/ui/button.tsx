@@ -48,7 +48,7 @@ export default function Button({
       },
       outline: {
         backgroundColor: "transparent",
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: theme.colors.border,
         borderBottomWidth: 4,
       },
@@ -86,7 +86,7 @@ export default function Button({
   return (
     <Pressable
       {...props}
-      style={[
+      style={({ pressed }) => [
         {
           borderRadius: theme.spacing.lg,
           justifyContent: "center",
@@ -96,6 +96,7 @@ export default function Button({
         },
         styles.container[variant],
         styles.sizes[size],
+        variant === "outline" && pressed && { borderBottomWidth: 2 },
         styleObj,
       ]}
     >
