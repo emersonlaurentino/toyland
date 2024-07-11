@@ -60,6 +60,7 @@ interface State {
     | "login-password"
     | "register"
     | "logout"
+    | "delete-account"
     | "reset-password";
   errorMessage?: string;
 }
@@ -72,6 +73,7 @@ interface Actions {
   fetchUser: () => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (input: z.infer<typeof resetPasswordSchema>) => Promise<void>;
+  deleteAccount: () => Promise<void>;
 }
 
 const initialState: State = {
@@ -180,6 +182,26 @@ export const useAuthStore = create(
             });
             set({ token: null, user: null });
             await AsyncStorage.removeItem("auth");
+          } catch (e) {
+            if (e instanceof Error) {
+              set({ errorMessage: e.message });
+            } else {
+              set({ errorMessage: "Erro desconhecido" });
+            }
+          } finally {
+            set({ loading: "none" });
+          }
+        },
+        deleteAccount: async () => {
+          try {
+            set({ loading: "delete-account" });
+            await fetch("https://api.toylandapp.com/user", {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${get().token}`,
+              },
+            });
+            await get().logout();
           } catch (e) {
             if (e instanceof Error) {
               set({ errorMessage: e.message });

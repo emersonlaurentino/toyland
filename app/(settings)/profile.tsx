@@ -1,4 +1,5 @@
 import Header from "@/components/navigation/header";
+import DeleteAccount from "@/components/settings/delete-account";
 import EditName from "@/components/settings/edit-name";
 import ImagePicker from "@/components/settings/image-picker";
 import theme from "@/constants/theme";
@@ -45,6 +46,7 @@ export default function Screen() {
         >
           <ImagePicker setLoading={setLoading} />
           <EditName setLoading={setLoading} />
+          <DeleteAccount />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

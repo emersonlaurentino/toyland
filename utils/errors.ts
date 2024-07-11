@@ -12,6 +12,10 @@ export function translateAuthErrorMessage(error?: string): string {
     return "Obrigatório";
   }
 
+  if (error === "Invalid email or password.") {
+    return "E-mail ou senha inválidos";
+  }
+
   console.log("error", error);
   return "Erro desconhecido";
 }

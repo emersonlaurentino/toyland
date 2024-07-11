@@ -1,5 +1,6 @@
 import theme from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { type ComponentProps } from "react";
 import {
   ActivityIndicator,
@@ -14,7 +15,7 @@ interface ButtonProps
   extends Omit<PressableProps, "children">,
     Pick<TextProps, "children"> {
   loading?: boolean;
-  variant?: "primary" | "secondary" | "error" | "ghost" | "outline";
+  variant?: "primary" | "secondary" | "destructive" | "ghost" | "outline";
   size?: "sm" | "md" | "lg";
   icon?: ComponentProps<typeof Ionicons>["name"];
   iconSize?: ComponentProps<typeof Ionicons>["size"];
@@ -28,6 +29,7 @@ export default function Button({
   style,
   iconSize,
   icon,
+  onPress,
   ...props
 }: ButtonProps) {
   const styleObj = typeof style === "object" ? style : {};
@@ -40,8 +42,11 @@ export default function Button({
       secondary: {
         backgroundColor: theme.colors.foreground,
       },
-      error: {
-        backgroundColor: theme.colors.foreground,
+      destructive: {
+        backgroundColor: "transparent",
+        borderWidth: 2,
+        borderColor: theme.colors.border,
+        borderBottomWidth: 4,
       },
       ghost: {
         backgroundColor: "transparent",
@@ -60,7 +65,7 @@ export default function Button({
       secondary: {
         color: theme.colors.grey1,
       },
-      error: {
+      destructive: {
         color: theme.colors.last,
       },
       ghost: {
@@ -86,6 +91,10 @@ export default function Button({
   return (
     <Pressable
       {...props}
+      onPress={(e) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onPress?.(e);
+      }}
       style={({ pressed }) => [
         {
           borderRadius: theme.spacing.lg,
@@ -96,7 +105,7 @@ export default function Button({
         },
         styles.container[variant],
         styles.sizes[size],
-        variant === "outline" && pressed && { borderBottomWidth: 2 },
+        pressed && { borderBottomWidth: 2 },
         styleObj,
       ]}
     >
