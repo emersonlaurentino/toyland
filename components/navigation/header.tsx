@@ -1,15 +1,13 @@
 import theme from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { ComponentProps } from "react";
+import { ReactNode } from "react";
 import { Pressable, Text, View } from "react-native";
 
 type Props = {
   title: string;
   canBack?: boolean;
-  onAction?: () => void;
-  actionIcon?: ComponentProps<typeof Ionicons>["name"];
-  actionColor?: string;
+  action?: ReactNode;
 };
 
 export default function Header(props: Props) {
@@ -23,6 +21,7 @@ export default function Header(props: Props) {
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: theme.spacing.lg,
+        position: "relative",
       }}
     >
       {props.canBack ? (
@@ -34,39 +33,30 @@ export default function Header(props: Props) {
             alignItems: "center",
             justifyContent: "center",
             marginLeft: -theme.spacing.lg,
+            zIndex: 1,
           }}
         >
           <Ionicons size={24} name="arrow-back" color="#999" />
         </Pressable>
       ) : null}
-      <Text
+      <View
         style={{
-          fontFamily: "QuicksandBold",
-          fontSize: 20,
+          position: "absolute",
+          top: 0,
+          left: props.canBack ? 0 : theme.spacing.lg,
+          bottom: 0,
+          right: 0,
+          justifyContent: "center",
+          alignItems: props.canBack ? "center" : "flex-start",
         }}
       >
-        {props.title}
-      </Text>
-      {props.onAction ? (
-        <Pressable
-          onPress={props.onAction}
-          style={{
-            height: 48,
-            width: 48,
-            alignItems: "center",
-            justifyContent: "center",
-            marginRight: -theme.spacing.lg,
-          }}
-        >
-          <Ionicons
-            size={24}
-            name={props.actionIcon}
-            color={props.actionColor}
-          />
-        </Pressable>
-      ) : (
-        <View style={{ width: 48, marginRight: -theme.spacing.lg }} />
-      )}
+        <Text style={{ fontFamily: "QuicksandBold", fontSize: 20 }}>
+          {props.title}
+        </Text>
+      </View>
+      <View style={{ right: theme.spacing.lg, position: "absolute" }}>
+        {props.action ? props.action : null}
+      </View>
     </View>
   );
 }

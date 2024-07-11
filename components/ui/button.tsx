@@ -64,7 +64,7 @@ export default function Button({
         color: theme.colors.last,
       },
       ghost: {
-        color: theme.colors.black,
+        color: theme.colors.primary,
       },
       outline: {
         color: theme.colors.primary,

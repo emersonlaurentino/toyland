@@ -29,7 +29,14 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permitir que Toyland acesse suas fotos para adicionar foto de perfil, grupos ou produtos.",
+          "cameraPermission": "Permitir que Toyland acesse sua câmera para ser possível que você registre fotos dos seus produtos."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

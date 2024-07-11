@@ -1,12 +1,14 @@
 import Header from "@/components/navigation/header";
 import ProductItem from "@/components/product-item";
+import ProfileImage from "@/components/settings/profile-image";
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
 import { useAuthStore } from "@/states/auth";
 import { formatDataGrid } from "@/utils/format-data-grid";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
-import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 
 type TabItemProps = {
   title: string;
@@ -87,9 +89,20 @@ export default function ProfileScreen() {
         <View>
           <Header
             title="Perfil"
-            actionColor="#999"
-            actionIcon="settings-outline"
-            onAction={() => router.push("/(settings)/settings")}
+            action={
+              <Pressable
+                onPress={() => router.push("/(settings)/settings")}
+                style={{
+                  height: 48,
+                  width: 48,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: -theme.spacing.lg,
+                }}
+              >
+                <Ionicons size={24} name="settings-outline" color="#999" />
+              </Pressable>
+            }
           />
 
           <View
@@ -100,40 +113,14 @@ export default function ProfileScreen() {
               padding: theme.spacing.lg,
             }}
           >
-            {!user?.imageUrl ? (
-              <View
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: 36,
-                  borderWidth: 1,
-                  borderColor: theme.colors.border,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {user?.name.charAt(0)}
-                </Text>
-              </View>
-            ) : (
-              <Image
-                source={{
-                  uri: `https://assets.toylandapp.com/${user?.imageUrl}`,
-                }}
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: 36,
-                  backgroundColor: theme.colors.foreground,
-                }}
-              />
-            )}
+            <ProfileImage
+              source={
+                user?.imageUrl
+                  ? { uri: `https://assets.toylandapp.com/${user?.imageUrl}` }
+                  : undefined
+              }
+              alt={user?.name.charAt(0)}
+            />
             <Text
               style={{
                 fontFamily: "QuicksandBold",
