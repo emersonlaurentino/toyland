@@ -29,7 +29,7 @@ export default function EditName(props: Props) {
         },
       });
       if (response.ok) {
-        await fetchUser();
+        await fetchUser("refresh");
       } else {
         console.error("Erro no update:", response.statusText);
       }
