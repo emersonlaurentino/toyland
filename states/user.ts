@@ -1,5 +1,5 @@
 import { type StateCreator } from "zustand";
-import { type AuthSlice } from "./auth-slice";
+import { type AuthSlice } from "./auth";
 
 interface User {
   id: string;

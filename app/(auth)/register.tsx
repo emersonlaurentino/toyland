@@ -3,7 +3,7 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
 import useBoundStore from "@/states";
-import { registerSchema } from "@/states/auth-slice";
+import { registerSchema } from "@/states/auth";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";

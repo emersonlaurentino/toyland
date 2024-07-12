@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { createAuthSlice, type AuthSlice } from "./auth-slice";
+import { createAuthSlice, type AuthSlice } from "./auth";
 import { createNewProductSlice, type NewProductSlice } from "./new-product";
 import { createUserSlice, type UserSlice } from "./user";
 
