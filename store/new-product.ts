@@ -36,6 +36,7 @@ interface State {
   newProductLoading: boolean;
   products: Product[];
   productsLoading: boolean;
+  deleteProductLoading: boolean;
 }
 
 interface Actions {
@@ -43,6 +44,7 @@ interface Actions {
   setNewProductImages: (images: ExpoImagePicker.ImagePickerAsset[]) => void;
   createProduct: (input: z.infer<typeof createProductSchema>) => Promise<void>;
   fetchProduct: (productId: string) => Promise<void>;
+  deleteProduct: (productId: string) => Promise<void>;
 }
 
 export type NewProductSlice = State & Actions;
@@ -52,6 +54,7 @@ const initialState: State = {
   newProductLoading: false,
   products: [],
   productsLoading: false,
+  deleteProductLoading: false,
 };
 
 export const createNewProductSlice: StateCreator<
@@ -90,8 +93,6 @@ export const createNewProductSlice: StateCreator<
 
       await apiFetch(get, "POST", `/products/${product.id}/images`, formData);
 
-      // await get().fetchUser();
-
       router.replace("/(tabs)/profile");
     } catch (error) {
       console.error(error);
@@ -110,6 +111,21 @@ export const createNewProductSlice: StateCreator<
       console.error(error);
     } finally {
       set({ productsLoading: false });
+    }
+  },
+  deleteProduct: async (productId) => {
+    set({ deleteProductLoading: true });
+    try {
+      const response = await apiFetch(get, "DELETE", `/products/${productId}`);
+      if (!response.ok) throw new Error("Erro ao deletar produto");
+      set((state) => ({
+        products: state.products.filter((p) => p.id !== productId),
+      }));
+      router.replace("/(tabs)/profile");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      set({ deleteProductLoading: false });
     }
   },
   resetNewProduct: () => set(initialState),

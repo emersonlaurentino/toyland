@@ -1,4 +1,5 @@
 import Header from "@/components/navigation/header";
+import DeleteProduct from "@/components/product/delete-product";
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
@@ -21,6 +22,10 @@ export default function Screen() {
   const { productId, name } = useLocalSearchParams();
   const fetchProduct = useBoundStore((state) => state.fetchProduct);
   const loading = useBoundStore((state) => state.productsLoading);
+  const deleteProduct = useBoundStore((state) => state.deleteProduct);
+  const deleteProductLoading = useBoundStore(
+    (state) => state.deleteProductLoading
+  );
   const product = useBoundStore((state) =>
     state.products.find((p) => p.id === productId)
   );
@@ -182,6 +187,11 @@ export default function Screen() {
             >
               {title}
             </Text>
+          )}
+          ListFooterComponent={() => (
+            <View style={{ padding: theme.spacing.lg }}>
+              <DeleteProduct id={product.id} />
+            </View>
           )}
           ListFooterComponentStyle={{ marginTop: theme.spacing.lg }}
         />
