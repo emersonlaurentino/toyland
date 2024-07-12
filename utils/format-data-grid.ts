@@ -1,4 +1,4 @@
-import type { Product } from "@/states/user";
+import type { Product } from "@/store/user";
 
 type CustomProduct = Product & { empty?: boolean };
 

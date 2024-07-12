@@ -1,6 +1,6 @@
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
-import useBoundStore from "@/states";
+import useBoundStore from "@/store";
 import * as ExpoImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 

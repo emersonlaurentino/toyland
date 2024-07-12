@@ -1,6 +1,6 @@
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
-import useBoundStore from "@/states";
+import useBoundStore from "@/store";
 import { Alert } from "react-native";
 
 export default function DeleteAccount() {

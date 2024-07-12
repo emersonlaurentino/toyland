@@ -1,5 +1,5 @@
 import theme from "@/constants/theme";
-import useBoundStore from "@/states";
+import useBoundStore from "@/store";
 import { useState } from "react";
 import { Text, TextInput } from "react-native";
 

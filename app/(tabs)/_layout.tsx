@@ -1,6 +1,6 @@
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import theme from "@/constants/theme";
-import useBoundStore from "@/states";
+import useBoundStore from "@/store";
 import { Redirect, Tabs } from "expo-router";
 import React, { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

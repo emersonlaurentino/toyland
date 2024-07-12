@@ -1,7 +1,7 @@
 import Header from "@/components/navigation/header";
 import SettingsLogout from "@/components/settings/logout";
 import theme from "@/constants/theme";
-import useBoundStore from "@/states";
+import useBoundStore from "@/store";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Linking, Pressable, SectionList, Text, View } from "react-native";

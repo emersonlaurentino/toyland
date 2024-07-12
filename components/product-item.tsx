@@ -1,6 +1,6 @@
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
-import { type Product } from "@/states/user";
+import { type Product } from "@/store/user";
 import { Image, Text, View } from "react-native";
 
 function ProductItem(product: Product) {
