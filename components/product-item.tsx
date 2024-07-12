@@ -1,11 +1,18 @@
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
-import { type Product } from "@/store/user";
-import { Image, Text, View } from "react-native";
+import { type Product } from "@/store/new-product";
+import { router } from "expo-router";
+import { Image, Pressable, Text, View } from "react-native";
 
 function ProductItem(product: Product) {
   return (
-    <View
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: "/(product)/[productId]",
+          params: { productId: product.id, name: product.name },
+        })
+      }
       style={{
         flex: 1,
         padding: theme.spacing.sm,
@@ -93,7 +100,7 @@ function ProductItem(product: Product) {
           </Text>
         ) : null}
       </View>
-    </View>
+    </Pressable>
   );
 }
 

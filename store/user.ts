@@ -1,5 +1,6 @@
 import { type StateCreator } from "zustand";
 import { type AuthSlice } from "./auth";
+import { type Product } from "./new-product";
 
 interface User {
   id: string;
@@ -15,14 +16,6 @@ interface Products {
   inventory: Product[];
   givingAway: Product[];
   history: Product[];
-}
-
-export interface Product {
-  id: string;
-  name: string;
-  description: string | null;
-  status: string;
-  images: string[];
 }
 
 interface State {
