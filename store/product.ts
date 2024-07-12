@@ -16,7 +16,7 @@ export interface Product {
 }
 
 export const createProductSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1).max(255),
   description: z.string().optional(),
   // status: z
   //   .enum([
