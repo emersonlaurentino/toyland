@@ -52,19 +52,19 @@ export default function Screen() {
         style={{ padding: theme.spacing.lg }}
         keyExtractor={(item) => item.title}
         stickySectionHeadersEnabled={false}
-        renderItem={({ item, index }) => (
+        renderItem={({ item, index, section }) => (
           <Pressable
             onPress={item.onAction}
             style={{
               borderWidth: 2,
-              borderBottomWidth: index === DATA.length - 1 ? 2 : 0,
+              borderBottomWidth: index === section.data.length - 1 ? 2 : 0,
               borderColor: theme.colors.border,
               borderTopEndRadius: index === 0 ? theme.spacing.lg : 0,
               borderTopStartRadius: index === 0 ? theme.spacing.lg : 0,
               borderBottomEndRadius:
-                index === DATA.length - 1 ? theme.spacing.lg : 0,
+                index === section.data.length - 1 ? theme.spacing.lg : 0,
               borderBottomStartRadius:
-                index === DATA.length - 1 ? theme.spacing.lg : 0,
+                index === section.data.length - 1 ? theme.spacing.lg : 0,
               padding: theme.spacing.lg,
               flexDirection: "row",
               justifyContent: "space-between",
