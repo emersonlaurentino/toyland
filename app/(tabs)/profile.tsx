@@ -3,7 +3,7 @@ import ProductItem from "@/components/product-item";
 import NewProduct from "@/components/product/button-new";
 import ProfileImage from "@/components/settings/profile-image";
 import theme from "@/constants/theme";
-import { useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
 import { formatDataGrid } from "@/utils/format-data-grid";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -74,7 +74,7 @@ const TABS: { [key: string]: string } = {
 };
 
 export default function ProfileScreen() {
-  const user = useAuthStore((state) => state.user);
+  const user = useBoundStore((state) => state.user);
   const [selectedTab, setSelectedTab] = useState("inventory");
 
   const tabs = Object.keys(user?.products || {}).map((key) => ({

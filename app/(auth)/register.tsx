@@ -2,20 +2,19 @@ import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
-import { registerSchema, resetState, useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
+import { registerSchema } from "@/states/auth-slice";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
   const insets = useSafeAreaInsets();
-  const loading = useAuthStore((state) => state.loading === "register");
-  const register = useAuthStore((state) => state.register);
-  const errorMessage = useAuthStore((state) => state.errorMessage);
+  const loading = useBoundStore((state) => state.registerLoading);
+  const register = useBoundStore((state) => state.register);
 
   const {
     control,
@@ -30,10 +29,6 @@ export default function Page() {
       password: "",
     },
   });
-
-  useEffect(() => {
-    resetState();
-  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -80,9 +75,7 @@ export default function Page() {
               }}
               label="E-mail"
               placeholder="nome@exemplo.com"
-              errorMessage={translateAuthErrorMessage(
-                errors.email?.message || errorMessage
-              )}
+              errorMessage={translateAuthErrorMessage(errors.email?.message)}
               keyboardType="email-address"
               onSubmitEditing={() => setFocus("password")}
               returnKeyType="next"

@@ -1,17 +1,19 @@
 import Header from "@/components/navigation/header";
 import Button from "@/components/ui/button";
+import InputField from "@/components/ui/input-field";
 import theme from "@/constants/theme";
-import { useNewProductStore } from "@/states/new-product";
+import useBoundStore from "@/states";
+import { createProductSchema } from "@/states/new-product";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "expo-image";
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   Dimensions,
   FlatList,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Text,
-  TextInput,
   View,
 } from "react-native";
 
@@ -19,7 +21,19 @@ const screenWidth = Dimensions.get("screen").width;
 const size = screenWidth * 0.7;
 
 export default function Screen() {
-  const images = useNewProductStore((state) => state.images);
+  const newProductImages = useBoundStore((state) => state.newProductImages);
+  const newProductLoading = useBoundStore((state) => state.newProductLoading);
+  const createProduct = useBoundStore((state) => state.createProduct);
+  const token = useBoundStore((state) => state.token);
+
+  const { control, handleSubmit } = useForm({
+    resolver: zodResolver(createProductSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      token: String(token),
+    },
+  });
 
   return (
     <KeyboardAvoidingView
@@ -32,12 +46,11 @@ export default function Screen() {
         keyboardShouldPersistTaps="handled"
       >
         <FlatList
-          data={images}
+          data={newProductImages}
           keyExtractor={(item) => item.uri}
           showsHorizontalScrollIndicator={false}
           horizontal
           style={{
-            // backgroundColor: theme.colors.foreground,
             height: size + theme.spacing.lg * 2,
             maxHeight: size + theme.spacing.lg * 2,
             paddingVertical: theme.spacing.lg,
@@ -55,60 +68,36 @@ export default function Screen() {
               style={{
                 width: size,
                 height: size,
-                // marginLeft: images.length === 1 ? screenWidth * 0.1 : 0,
                 borderRadius: theme.spacing.lg,
               }}
             />
           )}
         />
         <View style={{ padding: theme.spacing.lg, gap: theme.spacing.lg }}>
-          <View>
-            <Text
-              style={{
-                fontFamily: "QuicksandBold",
-                fontSize: 16,
-                marginBottom: theme.spacing.md,
-              }}
-            >
-              Nome
-            </Text>
-            <TextInput
-              placeholder="Digite o nome do produto"
-              style={{
-                fontFamily: "QuicksandBold",
-                fontSize: 16,
-                borderWidth: 2,
-                borderColor: theme.colors.border,
-                padding: theme.spacing.lg,
-                borderRadius: theme.spacing.lg,
-              }}
-            />
-          </View>
-          <View>
-            <Text
-              style={{
-                fontFamily: "QuicksandBold",
-                fontSize: 16,
-                marginBottom: theme.spacing.md,
-              }}
-            >
-              Descrição (Opcional)
-            </Text>
-            <TextInput
-              multiline
-              placeholder="Digite a descrição do produto"
-              style={{
-                fontFamily: "QuicksandBold",
-                fontSize: 16,
-                height: 100,
-                borderWidth: 2,
-                borderColor: theme.colors.border,
-                padding: theme.spacing.lg,
-                borderRadius: theme.spacing.lg,
-              }}
-            />
-          </View>
-          <Button>Salvar</Button>
+          <InputField
+            label="Nome"
+            placeholder="Digite o nome do produto"
+            controller={{
+              control,
+              name: "name",
+              rules: { required: true },
+            }}
+          />
+          <InputField
+            multiline
+            label="Descrição (Opcional)"
+            placeholder="Digite a descrição do produto"
+            controller={{
+              control,
+              name: "description",
+            }}
+          />
+          <Button
+            onPress={handleSubmit(createProduct)}
+            loading={newProductLoading}
+          >
+            Salvar
+          </Button>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

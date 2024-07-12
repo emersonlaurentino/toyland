@@ -1,7 +1,7 @@
 import Header from "@/components/navigation/header";
 import SettingsLogout from "@/components/settings/logout";
 import theme from "@/constants/theme";
-import { useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Linking, Pressable, SectionList, Text, View } from "react-native";
@@ -16,7 +16,7 @@ const handleEmail = (email: string) => {
 };
 
 export default function Screen() {
-  const user = useAuthStore((state) => state.user);
+  const user = useBoundStore((state) => state.user);
 
   const DATA = [
     {

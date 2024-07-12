@@ -1,11 +1,11 @@
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
-import { useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
 import { Alert } from "react-native";
 
 export default function DeleteAccount() {
-  const deleteAccount = useAuthStore((state) => state.deleteAccount);
-  const loading = useAuthStore((state) => state.loading === "delete-account");
+  const deleteAccount = useBoundStore((state) => state.deleteAccount);
+  const loading = useBoundStore((state) => state.deleteAccountLoading);
 
   return (
     <Button

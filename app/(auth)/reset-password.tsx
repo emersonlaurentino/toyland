@@ -2,11 +2,11 @@ import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
-import { resetPasswordSchema, resetState, useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
+import { resetPasswordSchema } from "@/states/auth-slice";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -14,8 +14,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function Page() {
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
-  const loading = useAuthStore((state) => state.loading === "reset-password");
-  const resetPassword = useAuthStore((state) => state.resetPassword);
+  const loading = useBoundStore((state) => state.resetPasswordLoading);
+  const resetPassword = useBoundStore((state) => state.resetPassword);
 
   const {
     control,
@@ -27,10 +27,6 @@ export default function Page() {
       email: String(params.email ?? ""),
     },
   });
-
-  useEffect(() => {
-    resetState();
-  }, []);
 
   return (
     <View

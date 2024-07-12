@@ -1,15 +1,15 @@
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import theme from "@/constants/theme";
+import useBoundStore from "@/states";
 import { Redirect, Tabs } from "expo-router";
 import React, { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useShallow } from "zustand/react/shallow";
-import { useAuthStore } from "../../states/auth";
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
-  const token = useAuthStore(useShallow((state) => state.token));
-  const fetchUser = useAuthStore((state) => state.fetchUser);
+  const token = useBoundStore(useShallow((state) => state.token));
+  const fetchUser = useBoundStore((state) => state.fetchUser);
   useEffect(() => {
     if (token) {
       fetchUser();

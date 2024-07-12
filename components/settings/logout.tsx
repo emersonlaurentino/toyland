@@ -1,10 +1,10 @@
 import Button from "@/components/ui/button";
-import { useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
 import { Alert } from "react-native";
 
 export default function SettingsLogout() {
-  const logout = useAuthStore((state) => state.logout);
-  const loading = useAuthStore((state) => state.loading === "logout");
+  const logout = useBoundStore((state) => state.logout);
+  const loading = useBoundStore((state) => state.logoutLoading);
 
   return (
     <Button

@@ -1,5 +1,5 @@
 import theme from "@/constants/theme";
-import { useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
 import { useState } from "react";
 import { Text, TextInput } from "react-native";
 
@@ -8,10 +8,10 @@ type Props = {
 };
 
 export default function EditName(props: Props) {
-  const user = useAuthStore((state) => state.user);
+  const user = useBoundStore((state) => state.user);
   const [name, setName] = useState(user!.name);
-  const token = useAuthStore((state) => state.token);
-  const fetchUser = useAuthStore((state) => state.fetchUser);
+  const token = useBoundStore((state) => state.token);
+  const fetchUser = useBoundStore((state) => state.fetchUser);
 
   const handleNameChange = (text: string) => {
     setName(text);

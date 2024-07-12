@@ -1,7 +1,7 @@
 import ProfileImage from "@/components/settings/profile-image";
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
-import { useAuthStore } from "@/states/auth";
+import useBoundStore from "@/states";
 import * as ExpoImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { View } from "react-native";
@@ -11,9 +11,9 @@ type Props = {
 };
 
 export default function ImagePicker(props: Props) {
-  const user = useAuthStore((state) => state.user);
-  const token = useAuthStore((state) => state.token);
-  const fetchUser = useAuthStore((state) => state.fetchUser);
+  const user = useBoundStore((state) => state.user);
+  const token = useBoundStore((state) => state.token);
+  const fetchUser = useBoundStore((state) => state.fetchUser);
   const [image, setImage] = useState<ExpoImagePicker.ImagePickerAsset>();
   const [mediaStatus, mediaRequestPermission] =
     ExpoImagePicker.useMediaLibraryPermissions();

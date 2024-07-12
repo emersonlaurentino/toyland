@@ -1,19 +1,21 @@
 import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
-import { useNewProductStore } from "@/states/new-product";
+import useBoundStore from "@/states";
 import * as ExpoImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 
 export default function NewProduct() {
-  const setImages = useNewProductStore((state) => state.setImages);
-  const resetImages = useNewProductStore((state) => state.reset);
+  const setNewProductImages = useBoundStore(
+    (state) => state.setNewProductImages
+  );
+  const resetNewProduct = useBoundStore((state) => state.resetNewProduct);
   const [mediaStatus, mediaRequestPermission] =
     ExpoImagePicker.useMediaLibraryPermissions();
 
   async function pickImage() {
     if (!mediaStatus?.granted) await mediaRequestPermission();
 
-    resetImages();
+    resetNewProduct();
     router.push("/(product)/new");
 
     const result = await ExpoImagePicker.launchImageLibraryAsync({
@@ -23,7 +25,7 @@ export default function NewProduct() {
     });
 
     if (!result.canceled) {
-      setImages(result.assets);
+      setNewProductImages(result.assets);
     } else {
       router.back();
     }

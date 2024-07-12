@@ -2,24 +2,19 @@ import AuthHeader from "@/components/auth/header";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import theme from "@/constants/theme";
-import {
-  loginWithPasswordSchema,
-  resetState,
-  useAuthStore,
-} from "@/states/auth";
+import useBoundStore from "@/states";
+import { loginWithPasswordSchema } from "@/states/auth-slice";
 import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
   const insets = useSafeAreaInsets();
-  const loading = useAuthStore((state) => state.loading === "login-password");
-  const loginWithPassword = useAuthStore((state) => state.loginWithPassword);
-  const errorMessage = useAuthStore((state) => state.errorMessage);
+  const loading = useBoundStore((state) => state.loginWithPasswordLoading);
+  const loginWithPassword = useBoundStore((state) => state.loginWithPassword);
 
   const {
     control,
@@ -34,10 +29,6 @@ export default function Page() {
       password: "",
     },
   });
-
-  useEffect(() => {
-    resetState();
-  }, []);
 
   return (
     <View
@@ -82,9 +73,7 @@ export default function Page() {
             }}
             label="Senha"
             placeholder="Digite sua senha"
-            errorMessage={translateAuthErrorMessage(
-              errors?.password?.message || errorMessage
-            )}
+            errorMessage={translateAuthErrorMessage(errors?.password?.message)}
             secureTextEntry
           />
           <Button onPress={handleSubmit(loginWithPassword)} loading={loading}>
