@@ -38,6 +38,8 @@ export default function Button({
     container: {
       primary: {
         backgroundColor: theme.colors.primary,
+        borderColor: theme.colors.primaryShade,
+        borderBottomWidth: 4,
       },
       secondary: {
         backgroundColor: theme.colors.foreground,
@@ -66,7 +68,7 @@ export default function Button({
         color: theme.colors.grey1,
       },
       destructive: {
-        color: theme.colors.last,
+        color: theme.colors.destructive,
       },
       ghost: {
         color: theme.colors.primary,
@@ -105,7 +107,7 @@ export default function Button({
         },
         styles.container[variant],
         styles.sizes[size],
-        pressed && { borderBottomWidth: 2 },
+        variant !== "ghost" && pressed && { borderBottomWidth: 2 },
         styleObj,
       ]}
     >
@@ -120,7 +122,7 @@ export default function Button({
               color={styles.content[variant].color}
             />
           )}
-          {icon && <View style={{ width: theme.spacing.sm }} />}
+          {icon && children && <View style={{ width: theme.spacing.sm }} />}
           <Text
             style={[
               { fontSize: 16, fontFamily: "QuicksandBold" },

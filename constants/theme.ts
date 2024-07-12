@@ -1,20 +1,19 @@
 export const colors = {
   primary: "#5D872C",
-  gold: "#faad14",
-  silver: "silver",
-  bronze: "#cd7f32",
-  last: "#F36464",
+  primaryShade: "#4D6F24",
+  destructive: "#F36464",
   background: "#fff",
   foreground: "#f5f5f5",
   black: "#000",
   white: "#fff",
+  border: "#d1d1d1",
+  // check if the colors are being used
   grey0: "#393e42",
   grey1: "#43484d",
   grey2: "#5e6977",
   grey3: "#86939e",
   grey4: "#bdc6cf",
   grey5: "#e1e8ee",
-  border: "#d1d1d1"
 };
 
 export const spacing = {

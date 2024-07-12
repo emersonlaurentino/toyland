@@ -22,11 +22,8 @@ export default function ImagePicker(props: Props) {
     if (!mediaStatus?.granted) await mediaRequestPermission();
     const result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,
-      allowsMultipleSelection: false,
-      allowsEditing: false,
       quality: 0.5,
       aspect: [1, 1],
-      exif: false,
     });
 
     if (!result.canceled) {

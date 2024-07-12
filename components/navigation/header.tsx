@@ -50,7 +50,7 @@ export default function Header(props: Props) {
           alignItems: props.canBack ? "center" : "flex-start",
         }}
       >
-        <Text style={{ fontFamily: "QuicksandBold", fontSize: 20 }}>
+        <Text style={{ fontFamily: "QuicksandBold", fontSize: 18 }}>
           {props.title}
         </Text>
       </View>

@@ -94,7 +94,7 @@ export default function Input({
         )}
       </View>
       {errorMessage && (
-        <Text style={{ color: theme.colors.last }}>{errorMessage}</Text>
+        <Text style={{ color: theme.colors.destructive }}>{errorMessage}</Text>
       )}
     </View>
   );

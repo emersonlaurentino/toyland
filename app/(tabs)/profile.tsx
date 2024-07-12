@@ -1,7 +1,7 @@
 import Header from "@/components/navigation/header";
 import ProductItem from "@/components/product-item";
+import NewProduct from "@/components/product/button-new";
 import ProfileImage from "@/components/settings/profile-image";
-import Button from "@/components/ui/button";
 import theme from "@/constants/theme";
 import { useAuthStore } from "@/states/auth";
 import { formatDataGrid } from "@/utils/format-data-grid";
@@ -133,13 +133,7 @@ export default function ProfileScreen() {
               </Text>
             </View>
 
-            <Button
-              style={{ margin: theme.spacing.lg, marginTop: 0 }}
-              variant="outline"
-              onPress={() => router.push("/(product)/new")}
-            >
-              Novo Produto
-            </Button>
+            <NewProduct />
 
             <FlatList
               contentContainerStyle={{ paddingHorizontal: theme.spacing.lg }}
