@@ -23,7 +23,7 @@ export default function DeleteProduct(props: Props) {
         ])
       }
       loading={loading}
-      variant="outline"
+      variant="destructive"
     >
       Apagar Produto
     </Button>
