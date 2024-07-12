@@ -9,6 +9,7 @@ import { Image } from "expo-image";
 import React from "react";
 import { useForm } from "react-hook-form";
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   KeyboardAvoidingView,
@@ -71,6 +72,18 @@ export default function Screen() {
                 borderRadius: theme.spacing.lg,
               }}
             />
+          )}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                width: size,
+                height: size,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <ActivityIndicator size={24} color={theme.colors.primary} />
+            </View>
           )}
         />
         <View style={{ padding: theme.spacing.lg, gap: theme.spacing.lg }}>
