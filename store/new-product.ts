@@ -1,11 +1,14 @@
+import apiFetch from "@/utils/api-fetch";
 import * as ExpoImagePicker from "expo-image-picker";
+import { router } from "expo-router";
 import { z } from "zod";
 import { StateCreator } from "zustand";
+import { AuthSlice } from "./auth";
+import { UserSlice } from "./user";
 
 export const createProductSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
-  token: z.string(),
   // status: z
   //   .enum([
   //     "available",
@@ -38,11 +41,11 @@ const initialState: State = {
 };
 
 export const createNewProductSlice: StateCreator<
-  NewProductSlice,
+  NewProductSlice & AuthSlice & UserSlice,
   [],
   [],
   NewProductSlice
-> = (set) => ({
+> = (set, get) => ({
   ...initialState,
   setNewProductImages: (images) => {
     set({ newProductImages: images });
@@ -50,13 +53,32 @@ export const createNewProductSlice: StateCreator<
   createProduct: async (input) => {
     set({ newProductLoading: true });
     try {
-      const response = await fetch("https://api.toylandapp.com/user/profile", {
-        headers: {
-          Authorization: `Bearer ${input.token}`,
-        },
+      const response = await apiFetch(
+        get,
+        "POST",
+        "/products",
+        JSON.stringify(input)
+      );
+      if (!response.ok) throw new Error("Erro ao criar produto");
+      const product = await response.json();
+
+      const formData = new FormData();
+
+      const images = get().newProductImages;
+
+      images.forEach((image) => {
+        formData.append("file", {
+          uri: image?.uri,
+          name: `image.${image?.uri.split(".").pop()}`,
+          type: `image/${image?.uri.split(".").pop()}`,
+        } as any);
       });
-      if (response.ok) {
-      }
+
+      await apiFetch(get, "POST", `/products/${product.id}/images`, formData);
+
+      // await get().fetchUser();
+
+      router.replace("/(tabs)/profile");
     } catch (error) {
       console.error(error);
     } finally {

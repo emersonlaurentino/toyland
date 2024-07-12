@@ -12,7 +12,7 @@ export default function TabLayout() {
   const fetchUser = useBoundStore((state) => state.fetchUser);
   useEffect(() => {
     if (token) {
-      fetchUser();
+      fetchUser("refresh");
     }
   }, [token]);
 

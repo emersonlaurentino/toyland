@@ -25,14 +25,12 @@ export default function Screen() {
   const newProductImages = useBoundStore((state) => state.newProductImages);
   const newProductLoading = useBoundStore((state) => state.newProductLoading);
   const createProduct = useBoundStore((state) => state.createProduct);
-  const token = useBoundStore((state) => state.token);
 
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: "",
       description: "",
-      token: String(token),
     },
   });
 

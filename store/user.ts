@@ -33,7 +33,7 @@ interface State {
 
 interface Actions {
   resetUser: () => void;
-  fetchUser: () => Promise<void>;
+  fetchUser: (refresh?: "refresh") => Promise<void>;
   deleteAccount: () => Promise<void>;
 }
 
@@ -45,13 +45,18 @@ const initialState: State = {
   deleteAccountLoading: false,
 };
 
-export const createUserSlice: StateCreator<UserSlice & AuthSlice, [], [], UserSlice> = (
-  set, get
-) => ({
+export const createUserSlice: StateCreator<
+  UserSlice & AuthSlice,
+  [],
+  [],
+  UserSlice
+> = (set, get) => ({
   ...initialState,
-  fetchUser: async () => {
+  fetchUser: async (refresh) => {
     try {
-      set({ userLoading: true });
+      if (!refresh) {
+        set({ userLoading: true });
+      }
       const request = await fetch("https://api.toylandapp.com/user/profile", {
         headers: {
           Authorization: `Bearer ${get().token}`,
@@ -68,7 +73,9 @@ export const createUserSlice: StateCreator<UserSlice & AuthSlice, [], [], UserSl
     } catch (error) {
       console.error(error);
     } finally {
-      set({ userLoading: false });
+      if (!refresh) {
+        set({ userLoading: false });
+      }
     }
   },
   deleteAccount: async () => {

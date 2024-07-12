@@ -76,6 +76,8 @@ const TABS: { [key: string]: string } = {
 export default function ProfileScreen() {
   const user = useBoundStore((state) => state.user);
   const [selectedTab, setSelectedTab] = useState("inventory");
+  const fetchUser = useBoundStore((state) => state.fetchUser);
+  const userLoading = useBoundStore((state) => state.userLoading);
 
   const tabs = Object.keys(user?.products || {}).map((key) => ({
     id: key,
@@ -103,6 +105,9 @@ export default function ProfileScreen() {
         }
       />
       <FlatList
+        onRefresh={fetchUser}
+        refreshing={userLoading}
+        showsVerticalScrollIndicator={false}
         ListHeaderComponent={
           <View>
             <View
@@ -157,11 +162,12 @@ export default function ProfileScreen() {
         contentContainerStyle={
           tabs.find((item) => item.id === selectedTab)?.count === "0"
             ? { flex: 1 }
-            : {}
+            : { paddingBottom: theme.spacing.lg }
         }
         columnWrapperStyle={{
           paddingHorizontal: theme.spacing.lg,
-          paddingVertical: theme.spacing.lg,
+          // paddingVertical: theme.spacing.lg,
+          paddingTop: theme.spacing.lg,
           gap: theme.spacing.lg,
         }}
         renderItem={({ item }) => {
