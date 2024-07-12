@@ -2,17 +2,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createAuthSlice, type AuthSlice } from "./auth";
-import { createNewProductSlice, type NewProductSlice } from "./new-product";
+import { createProductSlice, type ProductSlice } from "./product";
 import { createUserSlice, type UserSlice } from "./user";
 
-const useBoundStore = create<AuthSlice & UserSlice & NewProductSlice>()(
+const useBoundStore = create<AuthSlice & UserSlice & ProductSlice>()(
   (...a) => ({
     ...persist(createAuthSlice, {
       name: "auth-store",
       storage: createJSONStorage(() => AsyncStorage),
     })(...a),
     ...createUserSlice(...a),
-    ...createNewProductSlice(...a),
+    ...createProductSlice(...a),
   })
 );
 

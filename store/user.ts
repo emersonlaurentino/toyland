@@ -1,6 +1,6 @@
 import { type StateCreator } from "zustand";
 import { type AuthSlice } from "./auth";
-import { type Product } from "./new-product";
+import { type Product } from "./product";
 
 interface User {
   id: string;

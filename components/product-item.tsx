@@ -1,6 +1,6 @@
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
-import { type Product } from "@/store/new-product";
+import { type Product } from "@/store/product";
 import { router } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 

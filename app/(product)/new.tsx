@@ -3,7 +3,7 @@ import Button from "@/components/ui/button";
 import InputField from "@/components/ui/input-field";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
-import { createProductSchema } from "@/store/new-product";
+import { createProductSchema } from "@/store/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "expo-image";
 import React from "react";

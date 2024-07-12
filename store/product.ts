@@ -47,7 +47,7 @@ interface Actions {
   deleteProduct: (productId: string) => Promise<void>;
 }
 
-export type NewProductSlice = State & Actions;
+export type ProductSlice = State & Actions;
 
 const initialState: State = {
   newProductImages: [],
@@ -57,11 +57,11 @@ const initialState: State = {
   deleteProductLoading: false,
 };
 
-export const createNewProductSlice: StateCreator<
-  NewProductSlice & AuthSlice & UserSlice,
+export const createProductSlice: StateCreator<
+  ProductSlice & AuthSlice & UserSlice,
   [],
   [],
-  NewProductSlice
+  ProductSlice
 > = (set, get) => ({
   ...initialState,
   setNewProductImages: (images) => {
