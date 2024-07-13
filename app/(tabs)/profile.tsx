@@ -73,7 +73,7 @@ const TABS: { [key: string]: string } = {
   history: "Histórico",
 };
 
-export default function ProfileScreen() {
+export default function Screen() {
   const user = useBoundStore((state) => state.user);
   const [selectedTab, setSelectedTab] = useState("inventory");
   const fetchUser = useBoundStore((state) => state.fetchUser);
@@ -100,7 +100,7 @@ export default function ProfileScreen() {
               marginRight: -theme.spacing.lg,
             }}
           >
-            <Feather size={24} name="settings" color="#999" />
+            <Feather size={24} name="settings" color={theme.colors.text} />
           </Pressable>
         }
       />
