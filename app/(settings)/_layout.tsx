@@ -18,6 +18,7 @@ export default function Layout() {
     >
       <Stack.Screen name="settings" />
       <Stack.Screen name="profile" />
+      <Stack.Screen name="addresses" />
     </Stack>
   );
 }

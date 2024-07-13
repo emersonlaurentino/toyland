@@ -9,6 +9,7 @@ import { useShallow } from "zustand/react/shallow";
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const token = useBoundStore(useShallow((state) => state.token));
+  const user = useBoundStore(useShallow((state) => state.user));
   const fetchUser = useBoundStore((state) => state.fetchUser);
   useEffect(() => {
     if (token) {
@@ -42,6 +43,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Grupos",
+
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "chatbubbles" : "chatbubbles-outline"}
@@ -76,6 +78,14 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="profile"
+        listeners={{
+          // disable tab press if user is not loaded
+          tabPress: (e) => {
+            if (!user) {
+              e.preventDefault();
+            }
+          },
+        }}
         options={{
           title: "Perfil",
           tabBarIcon: ({ color, focused }) => (

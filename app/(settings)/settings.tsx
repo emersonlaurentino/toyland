@@ -27,6 +27,10 @@ export default function Screen() {
           onAction: () => router.push("/(settings)/preferences"),
         },
         { title: "Perfil", onAction: () => router.push("/(settings)/profile") },
+        {
+          title: "Endereços",
+          onAction: () => router.push("/(settings)/addresses"),
+        },
       ],
     },
     {
