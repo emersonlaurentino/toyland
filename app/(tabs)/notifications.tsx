@@ -1,34 +1,11 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet } from "react-native";
+import Header from "@/components/navigation/header";
+import { Text, View } from "react-native";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-
-export default function NotificationsScreen() {
+export default function Screen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={
-        <Ionicons size={310} name="code-slash" style={styles.headerImage} />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Notificações</ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={{ flex: 1 }}>
+      <Header title="Notificações" />
+      <Text>notifications</Text>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  titleContainer: {
-    flexDirection: "row",
-    gap: 8,
-  },
-});
