@@ -7,6 +7,7 @@ export const colors = {
   black: "#000",
   white: "#fff",
   border: "#d1d1d1",
+  text: "#86939e",
   // check if the colors are being used
   grey0: "#393e42",
   grey1: "#43484d",

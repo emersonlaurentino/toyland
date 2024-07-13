@@ -83,7 +83,7 @@ export default function Screen() {
               name="chevron-forward"
               size={20}
               style={{ marginRight: -theme.spacing.sm }}
-              color={theme.colors.grey4}
+              color={theme.colors.border}
             />
           </Pressable>
         )}

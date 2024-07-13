@@ -130,7 +130,7 @@ export default function Screen() {
                       fontFamily: "QuicksandMedium",
                       fontSize: 16,
                       marginBottom: theme.spacing.lg,
-                      color: theme.colors.grey3,
+                      color: theme.colors.text,
                     }}
                   >
                     {product.description}
@@ -170,7 +170,7 @@ export default function Screen() {
                 style={{
                   fontFamily: "QuicksandBold",
                   fontSize: 16,
-                  color: theme.colors.grey3,
+                  color: theme.colors.text,
                 }}
               >
                 {item.value}

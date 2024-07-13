@@ -187,7 +187,7 @@ export default function ProfileScreen() {
               style={{
                 fontFamily: "QuicksandBold",
                 fontSize: 16,
-                color: theme.colors.grey3,
+                color: theme.colors.text,
               }}
             >
               {`Nenhum produto ${

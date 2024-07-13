@@ -65,7 +65,7 @@ export default function Button({
         color: theme.colors.white,
       },
       secondary: {
-        color: theme.colors.grey1,
+        color: theme.colors.text,
       },
       destructive: {
         color: theme.colors.destructive,

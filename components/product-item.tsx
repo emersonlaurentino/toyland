@@ -92,7 +92,7 @@ function ProductItem(product: Product) {
             style={{
               fontFamily: "QuicksandMedium",
               fontSize: 14,
-              color: theme.colors.grey3,
+              color: theme.colors.text,
             }}
             numberOfLines={2}
           >
