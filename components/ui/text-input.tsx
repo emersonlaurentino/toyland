@@ -12,7 +12,7 @@ export interface TextInputProps extends RNTextInputProps {
 }
 
 const TextInput = forwardRef<RNTextInput, TextInputProps>(
-  ({ label, ...props }, ref) => {
+  ({ label, style, ...props }, ref) => {
     return (
       <View>
         <Text
@@ -27,15 +27,18 @@ const TextInput = forwardRef<RNTextInput, TextInputProps>(
         <RNTextInput
           {...props}
           ref={ref}
-          style={{
-            fontFamily: "QuicksandBold",
-            fontSize: 16,
-            height: props.multiline ? 100 : "auto",
-            borderWidth: 2,
-            borderColor: theme.colors.border,
-            padding: theme.spacing.lg,
-            borderRadius: theme.spacing.lg,
-          }}
+          style={[
+            {
+              fontFamily: "QuicksandBold",
+              fontSize: 16,
+              height: props.multiline ? 100 : "auto",
+              borderWidth: 2,
+              borderColor: theme.colors.border,
+              padding: theme.spacing.lg,
+              borderRadius: theme.spacing.lg,
+            },
+            style,
+          ]}
         />
       </View>
     );
