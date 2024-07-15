@@ -17,6 +17,7 @@ export default function Layout() {
       initialRouteName="new"
     >
       <Stack.Screen name="new" />
+      <Stack.Screen name="[id]" />
     </Stack>
   );
 }
