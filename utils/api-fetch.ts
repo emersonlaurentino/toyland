@@ -1,3 +1,5 @@
+import { BASE_URL } from "@/constants/config";
+
 export default function apiFetch(
   get: () => any,
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
@@ -7,7 +9,7 @@ export default function apiFetch(
   const contentType =
     body instanceof FormData ? "multipart/form-data" : "application/json";
 
-  return fetch(`https://api.toylandapp.com${path}`, {
+  return fetch(`${BASE_URL}${path}`, {
     method,
     body,
     headers: {

@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/constants/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { z } from "zod";
@@ -54,7 +55,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   loginWithPassword: async (input) => {
     try {
       set({ loginWithPasswordLoading: true });
-      const request = await fetch("https://api.toylandapp.com/auth/login", {
+      const request = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +75,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   register: async (input) => {
     try {
       set({ registerLoading: true });
-      const request = await fetch("https://api.toylandapp.com/auth/register", {
+      const request = await fetch(`${BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +95,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   logout: async () => {
     try {
       set({ logoutLoading: true });
-      await fetch("https://api.toylandapp.com/auth/logout", {
+      await fetch(`${BASE_URL}/auth/logout`, {
         headers: {
           Authorization: `Bearer ${get().token}`,
         },
@@ -110,16 +111,13 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
   resetPassword: async (input) => {
     try {
       set({ resetPasswordLoading: true });
-      const request = await fetch(
-        "https://api.toylandapp.com/auth/reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(input),
-        }
-      );
+      const request = await fetch("`{BASE_URL}/auth/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+      });
       const response = await request.json();
       if (response.error) throw new Error(response.error);
       router.replace("/(auth)/reset-password-waiting");

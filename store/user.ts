@@ -1,3 +1,4 @@
+import apiFetch from "@/utils/api-fetch";
 import { type StateCreator } from "zustand";
 import { type Address } from "./address";
 import { type AuthSlice } from "./auth";
@@ -52,11 +53,7 @@ export const createUserSlice: StateCreator<
       if (!refresh) {
         set({ userLoading: true });
       }
-      const request = await fetch("https://api.toylandapp.com/user/profile", {
-        headers: {
-          Authorization: `Bearer ${get().token}`,
-        },
-      });
+      const request = await apiFetch(get, "GET", "/user/profile");
       const response = await request.json();
 
       if (response.error === "Unauthorized") {
@@ -76,12 +73,7 @@ export const createUserSlice: StateCreator<
   deleteAccount: async () => {
     try {
       set({ deleteAccountLoading: true });
-      await fetch("https://api.toylandapp.com/user", {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${get().token}`,
-        },
-      });
+      await apiFetch(get, "DELETE", "/user");
       await get().logout();
     } catch (error) {
       console.error(error);

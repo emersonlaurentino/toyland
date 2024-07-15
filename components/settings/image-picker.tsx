@@ -1,5 +1,6 @@
 import ProfileImage from "@/components/settings/profile-image";
 import Button from "@/components/ui/button";
+import { BASE_URL } from "@/constants/config";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import * as ExpoImagePicker from "expo-image-picker";
@@ -43,7 +44,7 @@ export default function ImagePicker(props: Props) {
           type: `image/${image?.uri.split(".").pop()}`,
         } as any);
 
-        const response = await fetch("https://api.toylandapp.com/user/image", {
+        const response = await fetch(`${BASE_URL}/user/image`, {
           method: "PUT",
           body: formData,
           headers: {

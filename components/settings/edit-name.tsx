@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/constants/config";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { useState } from "react";
@@ -20,7 +21,7 @@ export default function EditName(props: Props) {
   const saveName = async (newName: string) => {
     props.setLoading(true);
     try {
-      const response = await fetch("https://api.toylandapp.com/user", {
+      const response = await fetch(`${BASE_URL}/user`, {
         method: "PATCH",
         body: JSON.stringify({ name: newName }),
         headers: {
