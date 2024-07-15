@@ -1,5 +1,6 @@
 import Header from "@/components/navigation/header";
 import DeleteProduct from "@/components/product/delete-product";
+import PublishOnMarketplace from "@/components/product/publish-on-marketplace";
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
@@ -189,7 +190,10 @@ export default function Screen() {
             </Text>
           )}
           ListFooterComponent={() => (
-            <View style={{ padding: theme.spacing.lg }}>
+            <View style={{ padding: theme.spacing.lg, gap: theme.spacing.lg }}>
+              {product.status === "available" && (
+                <PublishOnMarketplace id={product.id} />
+              )}
               <DeleteProduct id={product.id} />
             </View>
           )}

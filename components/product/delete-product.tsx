@@ -13,7 +13,7 @@ export default function DeleteProduct(props: Props) {
   return (
     <Button
       onPress={() =>
-        Alert.alert("Apagar Produto", "Tem certeza que deseja apagar?", [
+        Alert.alert("Apagar", "Tem certeza que deseja apagar o produto?", [
           {
             text: "Apagar",
             style: "destructive",
@@ -25,7 +25,7 @@ export default function DeleteProduct(props: Props) {
       loading={loading}
       variant="destructive"
     >
-      Apagar Produto
+      Apagar
     </Button>
   );
 }
