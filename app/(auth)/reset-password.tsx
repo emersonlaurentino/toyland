@@ -1,14 +1,13 @@
-import AuthHeader from "@/components/auth/header";
+import Header from "@/components/navigation/header";
 import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import InputField from "@/components/ui/input-field";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { resetPasswordSchema } from "@/store/auth";
-import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocalSearchParams } from "expo-router";
 import { useForm } from "react-hook-form";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
@@ -17,11 +16,7 @@ export default function Page() {
   const loading = useBoundStore((state) => state.resetPasswordLoading);
   const resetPassword = useBoundStore((state) => state.resetPassword);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { control, handleSubmit } = useForm({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
       email: String(params.email ?? ""),
@@ -29,24 +24,21 @@ export default function Page() {
   });
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
-        backgroundColor: theme.colors.background,
         flex: 1,
+        backgroundColor: theme.colors.background,
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
       }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <AuthHeader title="Esqueceu sua senha?" />
-
-      <View
-        style={{
-          gap: theme.spacing.lg,
-          paddingTop: theme.spacing.lg,
-          paddingHorizontal: theme.spacing.lg,
-        }}
+      <Header title="Esqueceu sua senha?" canBack />
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, padding: theme.spacing.lg }}
+        keyboardShouldPersistTaps="handled"
       >
-        <Input
+        <InputField
           controller={{
             control,
             name: "email",
@@ -55,14 +47,17 @@ export default function Page() {
           label="E-mail"
           autoFocus
           placeholder="nome@exemplo.com"
-          errorMessage={translateAuthErrorMessage(errors.email?.message ?? "")}
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        <Button onPress={handleSubmit(resetPassword)} loading={loading}>
+        <Button
+          onPress={handleSubmit(resetPassword)}
+          loading={loading}
+          style={{ marginTop: theme.spacing.lg * 2 }}
+        >
           Enviar e-mail de recuperação
         </Button>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
