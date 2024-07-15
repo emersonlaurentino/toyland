@@ -6,9 +6,10 @@ import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { type Address } from "@/store/address";
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -26,6 +27,8 @@ export default function Screen() {
   const [selected, setSelected] = useState<string>("donation");
   const [price, setPrice] = useState<string>("");
   const address = useBoundStore((state) => state.user?.address);
+  const publish = useBoundStore((state) => state.publishOnMarketplace);
+  const loading = useBoundStore((state) => state.publishOnMarketplaceLoading);
 
   function handleChange(value: string) {
     const numericValue = value.replace(/[^0-9]/g, "");
@@ -37,14 +40,25 @@ export default function Screen() {
     setPrice(formattedValue);
   }
 
-  console.log(params.productId, selected, price.replace(/[^0-9]/g, ""));
-
   if (!address) {
     return (
       <View style={{ flex: 1 }}>
         <Text>Sem endereço</Text>
       </View>
     );
+  }
+
+  function handleSubmit() {
+    if (!price && selected === "sale") {
+      Alert.alert("Por favor, informe um preço");
+    } else {
+      publish({
+        addressId: address!.id,
+        productId: String(params.productId),
+        type: selected as "donation" | "sale",
+        price: Number(price.replace(/[^0-9]/g, "")),
+      });
+    }
   }
 
   return (
@@ -57,7 +71,10 @@ export default function Screen() {
         contentContainerStyle={{ flexGrow: 1, padding: theme.spacing.lg }}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={{ gap: theme.spacing.lg }}>
+        <View
+          style={{ gap: theme.spacing.lg }}
+          pointerEvents={loading ? "none" : "auto"}
+        >
           <View>
             <Text
               style={{
@@ -70,7 +87,7 @@ export default function Screen() {
             </Text>
 
             <Pressable
-              // onPress={item.onAction}
+              onPress={() => router.push("/(settings)/addresses")}
               style={{
                 borderWidth: 2,
                 borderColor: theme.colors.border,
@@ -126,7 +143,13 @@ export default function Screen() {
             />
           )}
         </View>
-        <Button style={{ marginTop: theme.spacing.lg * 2 }}>Anunciar</Button>
+        <Button
+          style={{ marginTop: theme.spacing.lg * 2 }}
+          onPress={handleSubmit}
+          loading={loading}
+        >
+          Anunciar
+        </Button>
       </ScrollView>
     </KeyboardAvoidingView>
   );

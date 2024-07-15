@@ -8,8 +8,8 @@ import { UserSlice } from "./user";
 export const publishOnMarketplaceSchema = z.object({
   productId: z.string().cuid2(),
   addressId: z.string().cuid2(),
-  price: z.number().int().positive().optional(),
   type: z.enum(["sale", "donation"]).default("sale"),
+  price: z.number().optional(),
 });
 
 interface State {
@@ -41,11 +41,7 @@ export const createMarketplaceSlice: StateCreator<
       set({ publishOnMarketplaceLoading: true });
 
       const response = await apiFetch(get, "POST", "/marketplace", {
-        body: JSON.stringify({
-          productId: input.productId,
-          addressId: input.addressId,
-          price: input.price,
-        }),
+        body: JSON.stringify(input),
       });
 
       if (!response.ok) {
@@ -53,6 +49,8 @@ export const createMarketplaceSlice: StateCreator<
       }
 
       const data = await response.json();
+
+      await get().fetchUser("refresh");
 
       router.push({ pathname: "/marketplace/[id]", params: { id: data.id } });
     } catch (error) {
