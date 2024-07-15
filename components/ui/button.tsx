@@ -43,6 +43,9 @@ export default function Button({
       },
       secondary: {
         backgroundColor: theme.colors.foreground,
+        borderWidth: 2,
+        borderColor: theme.colors.border,
+        borderBottomWidth: 4,
       },
       destructive: {
         backgroundColor: "transparent",
@@ -65,7 +68,7 @@ export default function Button({
         color: theme.colors.white,
       },
       secondary: {
-        color: theme.colors.text,
+        color: theme.colors.black,
       },
       destructive: {
         color: theme.colors.destructive,

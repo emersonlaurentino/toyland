@@ -23,21 +23,12 @@ export default function GetStartedScreen() {
       <StatusBar style="light" />
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Image
-          source={require("../../assets/images/toyland-logo.png")}
+          source={require("@/assets/images/toyland-logo.png")}
           style={{
             height: 96,
             width: 160,
           }}
         />
-        {/* <Text
-          style={{
-            fontSize: 40,
-            fontWeight: "bold",
-            color: theme.colors.white,
-          }}
-        >
-          Toyland
-        </Text> */}
       </View>
       <View>
         <View
@@ -46,7 +37,9 @@ export default function GetStartedScreen() {
             gap: 10,
           }}
         >
-          <Button onPress={() => router.push("/register")}>Começar Agora</Button>
+          <Button onPress={() => router.push("/register")}>
+            Começar Agora
+          </Button>
           <Button onPress={() => router.push("/login")} variant="secondary">
             Entrar
           </Button>

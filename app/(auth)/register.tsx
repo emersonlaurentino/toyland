@@ -1,10 +1,9 @@
-import AuthHeader from "@/components/auth/header";
+import Header from "@/components/navigation/header";
 import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import InputField from "@/components/ui/input-field";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { registerSchema } from "@/store/auth";
-import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useForm } from "react-hook-form";
@@ -16,12 +15,7 @@ export default function Page() {
   const loading = useBoundStore((state) => state.registerLoading);
   const register = useBoundStore((state) => state.register);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setFocus,
-  } = useForm({
+  const { control, handleSubmit, setFocus } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
@@ -32,74 +26,72 @@ export default function Page() {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, backgroundColor: theme.colors.background }}
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+      }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <Header title="Criar Conta" canBack />
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          backgroundColor: theme.colors.background,
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
+          justifyContent: "space-between",
+          padding: theme.spacing.lg,
         }}
         keyboardShouldPersistTaps="handled"
       >
-        <View>
-          <AuthHeader title="Criar Conta" />
-
-          <View
-            style={{
-              gap: theme.spacing.lg,
-              paddingTop: theme.spacing.lg,
-              paddingHorizontal: theme.spacing.lg,
+        <View style={{ gap: theme.spacing.lg }}>
+          <InputField
+            controller={{
+              control,
+              name: "name",
+              rules: { required: true },
             }}
+            label="Nome"
+            placeholder="Digite seu nome"
+            keyboardType="default"
+            onSubmitEditing={() => setFocus("email")}
+            returnKeyType="next"
+          />
+          <InputField
+            controller={{
+              control,
+              name: "email",
+              rules: { required: true },
+            }}
+            label="E-mail"
+            placeholder="nome@exemplo.com"
+            keyboardType="email-address"
+            onSubmitEditing={() => setFocus("password")}
+            returnKeyType="next"
+            autoCapitalize="none"
+          />
+          <InputField
+            controller={{
+              control,
+              name: "password",
+              rules: { required: true },
+            }}
+            label="Senha"
+            placeholder="Digite sua senha"
+            secureTextEntry
+          />
+          <Button
+            onPress={handleSubmit(register)}
+            loading={loading}
+            style={{ marginTop: theme.spacing.lg }}
           >
-            <Input
-              controller={{
-                control,
-                name: "name",
-                rules: { required: true },
-              }}
-              label="Nome"
-              placeholder="Digite seu nome"
-              errorMessage={translateAuthErrorMessage(errors.name?.message)}
-              keyboardType="default"
-              onSubmitEditing={() => setFocus("email")}
-              returnKeyType="next"
-            />
-            <Input
-              controller={{
-                control,
-                name: "email",
-                rules: { required: true },
-              }}
-              label="E-mail"
-              placeholder="nome@exemplo.com"
-              errorMessage={translateAuthErrorMessage(errors.email?.message)}
-              keyboardType="email-address"
-              onSubmitEditing={() => setFocus("password")}
-              returnKeyType="next"
-              autoCapitalize="none"
-            />
-            <Input
-              controller={{
-                control,
-                name: "password",
-                rules: { required: true },
-              }}
-              label="Senha"
-              placeholder="Digite sua senha"
-              errorMessage={translateAuthErrorMessage(
-                errors?.password?.message
-              )}
-              secureTextEntry
-            />
-            <Button onPress={handleSubmit(register)} loading={loading}>
-              Criar Conta
-            </Button>
-          </View>
+            Criar Conta
+          </Button>
         </View>
-        <Button onPress={() => router.push("login")} variant="ghost">
+        <Button
+          onPress={() => router.push("login")}
+          variant="ghost"
+          style={{ marginBottom: theme.spacing.lg * 2 }}
+        >
           Já tem uma conta? Faça login
         </Button>
       </ScrollView>

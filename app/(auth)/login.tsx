@@ -1,14 +1,13 @@
-import AuthHeader from "@/components/auth/header";
+import Header from "@/components/navigation/header";
 import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import InputField from "@/components/ui/input-field";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { loginWithPasswordSchema } from "@/store/auth";
-import { translateAuthErrorMessage } from "@/utils/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { useForm } from "react-hook-form";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
@@ -16,13 +15,7 @@ export default function Page() {
   const loading = useBoundStore((state) => state.loginWithPasswordLoading);
   const loginWithPassword = useBoundStore((state) => state.loginWithPassword);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setFocus,
-    getValues,
-  } = useForm({
+  const { control, handleSubmit, setFocus, getValues } = useForm({
     resolver: zodResolver(loginWithPasswordSchema),
     defaultValues: {
       email: "",
@@ -31,25 +24,26 @@ export default function Page() {
   });
 
   return (
-    <View
+    <KeyboardAvoidingView
       style={{
-        backgroundColor: theme.colors.background,
         flex: 1,
+        backgroundColor: theme.colors.background,
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
-        justifyContent: "space-between",
       }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View>
-        <AuthHeader title="Entrar" />
-        <View
-          style={{
-            gap: theme.spacing.lg,
-            paddingTop: theme.spacing.lg,
-            paddingHorizontal: theme.spacing.lg,
-          }}
-        >
-          <Input
+      <Header title="Entrar" canBack />
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "space-between",
+          padding: theme.spacing.lg,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={{ gap: theme.spacing.lg }}>
+          <InputField
             controller={{
               control,
               name: "email",
@@ -57,15 +51,12 @@ export default function Page() {
             }}
             label="E-mail"
             placeholder="nome@exemplo.com"
-            errorMessage={translateAuthErrorMessage(
-              errors.email?.message ?? ""
-            )}
             keyboardType="email-address"
             onSubmitEditing={() => setFocus("password")}
             returnKeyType="next"
             autoCapitalize="none"
           />
-          <Input
+          <InputField
             controller={{
               control,
               name: "password",
@@ -73,10 +64,13 @@ export default function Page() {
             }}
             label="Senha"
             placeholder="Digite sua senha"
-            errorMessage={translateAuthErrorMessage(errors?.password?.message)}
             secureTextEntry
           />
-          <Button onPress={handleSubmit(loginWithPassword)} loading={loading}>
+          <Button
+            onPress={handleSubmit(loginWithPassword)}
+            loading={loading}
+            style={{ marginTop: theme.spacing.lg }}
+          >
             Entrar
           </Button>
           <Button
@@ -93,10 +87,14 @@ export default function Page() {
             Esqueceu sua senha?
           </Button>
         </View>
-      </View>
-      <Button onPress={() => router.push("register")} variant="ghost">
-        Você não tem uma conta?
-      </Button>
-    </View>
+        <Button
+          onPress={() => router.push("register")}
+          variant="ghost"
+          style={{ marginBottom: theme.spacing.lg * 2 }}
+        >
+          Você não tem uma conta?
+        </Button>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
