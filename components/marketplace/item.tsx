@@ -85,10 +85,10 @@ function MarketplaceItem(listing: Listing) {
               fontSize: 16,
             }}
           >
-            {Intl.NumberFormat("pt-BR", {
+            {(listing.price / 100).toLocaleString("pt-BR", {
               style: "currency",
               currency: "BRL",
-            }).format(listing.price)}
+            })}
           </Text>
         )}
         <Text

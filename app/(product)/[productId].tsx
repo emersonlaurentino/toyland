@@ -43,10 +43,10 @@ export default function Screen() {
             ? [
                 {
                   title: "Preço",
-                  value: new Intl.NumberFormat("pt-BR", {
+                  value: (product.listing.price / 100).toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL",
-                  }).format(product.listing.price),
+                  }),
                 },
               ]
             : []),
