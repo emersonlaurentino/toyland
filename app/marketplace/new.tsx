@@ -87,7 +87,7 @@ export default function Screen() {
             </Text>
 
             <Pressable
-              onPress={() => router.push("/(settings)/addresses")}
+              onPress={() => router.push("/settings/addresses")}
               style={{
                 borderWidth: 2,
                 borderColor: theme.colors.border,

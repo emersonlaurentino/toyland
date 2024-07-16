@@ -14,9 +14,9 @@ export default function Layout() {
           backgroundColor: theme.colors.background,
         },
       }}
-      initialRouteName="settings"
+      initialRouteName="index"
     >
-      <Stack.Screen name="settings" />
+      <Stack.Screen name="index" />
       <Stack.Screen name="profile" />
       <Stack.Screen name="addresses" />
     </Stack>

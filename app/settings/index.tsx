@@ -23,10 +23,10 @@ export default function Screen() {
     {
       title: "Conta",
       data: [
-        { title: "Perfil", onAction: () => router.push("/(settings)/profile") },
+        { title: "Perfil", onAction: () => router.push("/settings/profile") },
         {
           title: "Endereços",
-          onAction: () => router.push("/(settings)/addresses"),
+          onAction: () => router.push("/settings/addresses"),
         },
       ],
     },

@@ -10,7 +10,6 @@ export default function Screen() {
         title="Grupos"
         action={
           <Pressable
-            // onPress={() => router.push("/(settings)/settings")}
             style={{
               height: 48,
               width: 48,

@@ -44,7 +44,7 @@ export default function Screen() {
           <Pressable
             onPress={() =>
               router.push({
-                pathname: "/(settings)/addresses",
+                pathname: "/settings/addresses",
                 params: { screen: "marketplace" },
               })
             }

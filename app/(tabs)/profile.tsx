@@ -21,7 +21,7 @@ export default function Screen() {
         title="Perfil"
         action={
           <Pressable
-            onPress={() => router.push("/(settings)/settings")}
+            onPress={() => router.push("/settings")}
             style={{
               height: 48,
               width: 48,
