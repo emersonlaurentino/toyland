@@ -13,6 +13,15 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   images: string[];
+  listing: Listing | null;
+}
+
+interface Listing {
+  id: string;
+  price: number;
+  address: string;
+  type: "donation" | "sale";
+  createdAt: string;
 }
 
 export const createProductSchema = z.object({
@@ -103,10 +112,19 @@ export const createProductSlice: StateCreator<
   fetchProduct: async (productId) => {
     set({ productsLoading: true });
     try {
-      const response = await apiFetch(get, "GET", `/products/${productId}`);
+      const response = await apiFetch(
+        get,
+        "GET",
+        `/products/${productId}?marketplace=true`
+      );
       if (!response.ok) throw new Error("Erro ao buscar produto");
       const product = await response.json();
-      set((state) => ({ products: [...state.products, product] }));
+      set((state) => ({
+        products: [
+          ...state.products.filter((p) => p.id !== product.id),
+          product,
+        ],
+      }));
     } catch (error) {
       console.error(error);
     } finally {

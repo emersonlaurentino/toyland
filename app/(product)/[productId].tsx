@@ -1,11 +1,12 @@
 import Header from "@/components/navigation/header";
 import DeleteProduct from "@/components/product/delete-product";
 import PublishOnMarketplace from "@/components/product/publish-on-marketplace";
+import Button from "@/components/ui/button";
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { Image } from "expo-image";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect } from "react";
 import {
   ActivityIndicator,
@@ -23,10 +24,6 @@ export default function Screen() {
   const { productId, name } = useLocalSearchParams();
   const fetchProduct = useBoundStore((state) => state.fetchProduct);
   const loading = useBoundStore((state) => state.productsLoading);
-  const deleteProduct = useBoundStore((state) => state.deleteProduct);
-  const deleteProductLoading = useBoundStore(
-    (state) => state.deleteProductLoading
-  );
   const product = useBoundStore((state) =>
     state.products.find((p) => p.id === productId)
   );
@@ -36,6 +33,31 @@ export default function Screen() {
       fetchProduct(String(productId));
     }
   }, [productId]);
+
+  const listing = product?.listing
+    ? {
+        title: "Dados do Anúncio",
+        data: [
+          ...(product.listing.type === "sale"
+            ? [
+                {
+                  title: "Preço",
+                  value: new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(product.listing.price),
+                },
+              ]
+            : []),
+          {
+            title: "Anunciado em",
+            value: new Intl.DateTimeFormat("pt-BR").format(
+              new Date(product.listing.createdAt)
+            ),
+          },
+        ],
+      }
+    : [];
 
   return (
     <View style={{ flex: 1 }}>
@@ -69,7 +91,7 @@ export default function Screen() {
                 },
               ],
             },
-          ]}
+          ].concat(listing)}
           keyExtractor={(item) => item.title}
           stickySectionHeadersEnabled={false}
           ListHeaderComponent={() => (
@@ -189,15 +211,34 @@ export default function Screen() {
               {title}
             </Text>
           )}
+          showsVerticalScrollIndicator={false}
           ListFooterComponent={() => (
             <View style={{ padding: theme.spacing.lg, gap: theme.spacing.lg }}>
-              {product.status === "available" && (
-                <PublishOnMarketplace id={product.id} />
+              {product?.listing && (
+                <Button
+                  variant="outline"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/marketplace/[id]",
+                      params: { id: product.listing!.id },
+                    })
+                  }
+                >
+                  Ver Anúncio
+                </Button>
               )}
-              <DeleteProduct id={product.id} />
+              {product.status === "available" ? (
+                <>
+                  <PublishOnMarketplace id={product.id} />
+                  <DeleteProduct id={product.id} />
+                </>
+              ) : null}
             </View>
           )}
-          ListFooterComponentStyle={{ marginTop: theme.spacing.lg }}
+          ListFooterComponentStyle={{
+            marginTop: theme.spacing.lg,
+            marginBottom: theme.spacing.lg * 3,
+          }}
         />
       )}
     </View>
