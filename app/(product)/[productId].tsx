@@ -21,7 +21,7 @@ const screenWidth = Dimensions.get("screen").width;
 const size = screenWidth * 0.7;
 
 export default function Screen() {
-  const { productId, name } = useLocalSearchParams();
+  const { productId } = useLocalSearchParams();
   const fetchProduct = useBoundStore((state) => state.fetchProduct);
   const loading = useBoundStore((state) => state.productLoading);
   const refreshing = useBoundStore((state) => state.productRefreshing);
@@ -62,7 +62,7 @@ export default function Screen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header title={String(name)} canBack />
+      <Header title="Produto" canBack />
       {loading && !product && (
         <View
           style={{

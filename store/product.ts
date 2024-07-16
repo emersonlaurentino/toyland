@@ -115,7 +115,7 @@ export const createProductSlice: StateCreator<
 
       router.replace({
         pathname: "/(product)/[productId]",
-        params: { productId: product.id, name: product.name },
+        params: { productId: product.id },
       });
     } catch (error) {
       console.error(error);

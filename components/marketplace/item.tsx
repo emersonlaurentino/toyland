@@ -1,17 +1,18 @@
 import { productStatus } from "@/constants/product-status";
 import theme from "@/constants/theme";
 import { Listing } from "@/store/marketplace";
+import { router } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 
 function MarketplaceItem(listing: Listing) {
   return (
     <Pressable
-      // onPress={() =>
-      //   router.push({
-      //     pathname: "/(product)/[productId]",
-      //     params: { productId: product.id, name: product.name },
-      //   })
-      // }
+      onPress={() =>
+        router.push({
+          pathname: "/marketplace/[id]",
+          params: { id: listing.id },
+        })
+      }
       style={{
         flex: 1,
         padding: theme.spacing.sm,

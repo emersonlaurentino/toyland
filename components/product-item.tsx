@@ -10,7 +10,7 @@ function ProductItem(product: Product) {
       onPress={() =>
         router.push({
           pathname: "/(product)/[productId]",
-          params: { productId: product.id, name: product.name },
+          params: { productId: product.id },
         })
       }
       style={{
