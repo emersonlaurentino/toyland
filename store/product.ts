@@ -113,10 +113,7 @@ export const createProductSlice: StateCreator<
 
       await get().fetchUser("refresh");
 
-      router.replace({
-        pathname: "/(product)/[productId]",
-        params: { productId: product.id },
-      });
+      router.replace({ pathname: "/product/[id]", params: { id: product.id } });
     } catch (error) {
       console.error(error);
     } finally {

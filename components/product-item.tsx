@@ -8,10 +8,7 @@ function ProductItem(product: Product) {
   return (
     <Pressable
       onPress={() =>
-        router.push({
-          pathname: "/(product)/[productId]",
-          params: { productId: product.id },
-        })
+        router.push({ pathname: "/product/[id]", params: { id: product.id } })
       }
       style={{
         flex: 1,

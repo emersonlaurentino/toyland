@@ -21,19 +21,19 @@ const screenWidth = Dimensions.get("screen").width;
 const size = screenWidth * 0.7;
 
 export default function Screen() {
-  const { productId } = useLocalSearchParams();
+  const { id } = useLocalSearchParams();
   const fetchProduct = useBoundStore((state) => state.fetchProduct);
   const loading = useBoundStore((state) => state.productLoading);
   const refreshing = useBoundStore((state) => state.productRefreshing);
   const product = useBoundStore((state) =>
-    state.products.find((p) => p.id === productId)
+    state.products.find((p) => p.id === id)
   );
 
   useEffect(() => {
-    if (productId) {
-      fetchProduct({ productId: String(productId) });
+    if (id) {
+      fetchProduct({ productId: String(id) });
     }
-  }, [productId]);
+  }, [id]);
 
   const listing = product?.listing
     ? {
@@ -76,7 +76,7 @@ export default function Screen() {
       )}
       {product && (
         <SectionList
-          onRefresh={() => fetchProduct({ productId: String(productId) }, true)}
+          onRefresh={() => fetchProduct({ productId: String(id) }, true)}
           refreshing={refreshing}
           sections={[
             {

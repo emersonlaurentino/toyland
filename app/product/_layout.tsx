@@ -14,10 +14,10 @@ export default function Layout() {
           backgroundColor: theme.colors.background,
         },
       }}
-      // initialRouteName="index"
+      initialRouteName="new"
     >
-      {/* <Stack.Screen name="index" /> */}
       <Stack.Screen name="new" />
+      <Stack.Screen name="[id]" />
     </Stack>
   );
 }

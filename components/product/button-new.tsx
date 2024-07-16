@@ -16,7 +16,7 @@ export default function NewProduct() {
     if (!mediaStatus?.granted) await mediaRequestPermission();
 
     resetNewProduct();
-    router.push("/(product)/new");
+    router.push("/product/new");
 
     const result = await ExpoImagePicker.launchImageLibraryAsync({
       mediaTypes: ExpoImagePicker.MediaTypeOptions.Images,

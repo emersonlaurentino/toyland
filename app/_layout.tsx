@@ -36,7 +36,7 @@ export default function RootLayout() {
       <Stack initialRouteName="(tabs)">
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(product)" options={{ headerShown: false }} />
+        <Stack.Screen name="product" options={{ headerShown: false }} />
         <Stack.Screen name="(settings)" options={{ headerShown: false }} />
         <Stack.Screen name="marketplace" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
