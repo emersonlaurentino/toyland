@@ -1,8 +1,9 @@
-import { type Product } from "@/store/product";
+type Custom<T> = T & { empty?: boolean };
 
-type CustomProduct = Product & { empty?: boolean };
-
-export const formatDataGrid = (data: CustomProduct[], numColumns: number) => {
+export const formatDataGrid = <T extends Object>(
+  data: Custom<T>[],
+  numColumns: number
+) => {
   const dataClone = [...data];
   const numberOfFullRows = Math.floor(dataClone.length / numColumns);
   let numberOfElementsLastRow =
@@ -12,7 +13,7 @@ export const formatDataGrid = (data: CustomProduct[], numColumns: number) => {
     numberOfElementsLastRow !== numColumns &&
     numberOfElementsLastRow !== 0
   ) {
-    dataClone.push({ empty: true } as CustomProduct);
+    dataClone.push({ empty: true } as Custom<T>);
     numberOfElementsLastRow++;
   }
 

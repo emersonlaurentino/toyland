@@ -4,6 +4,7 @@ import NewProduct from "@/components/product/button-new";
 import ProfileImage from "@/components/settings/profile-image";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
+import { Product } from "@/store/product";
 import { formatDataGrid } from "@/utils/format-data-grid";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -157,7 +158,7 @@ export default function Screen() {
             />
           </View>
         }
-        data={formatDataGrid((user?.products as any)[selectedTab], 2)}
+        data={formatDataGrid<Product>((user?.products as any)[selectedTab], 2)}
         numColumns={2}
         contentContainerStyle={
           tabs.find((item) => item.id === selectedTab)?.count === "0"

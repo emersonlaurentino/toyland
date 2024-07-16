@@ -14,7 +14,7 @@ export const publishOnMarketplaceSchema = z.object({
   price: z.number().optional(),
 });
 
-interface Listing {
+export interface Listing {
   id: string;
   type: string;
   price: number;

@@ -1,7 +1,10 @@
+import MarketplaceItem from "@/components/marketplace/item";
 import Header from "@/components/navigation/header";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { type Address } from "@/store/address";
+import { Listing } from "@/store/marketplace";
+import { formatDataGrid } from "@/utils/format-data-grid";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect } from "react";
@@ -85,11 +88,13 @@ export default function Screen() {
                   height: 48,
                   alignItems: "center",
                   gap: theme.spacing.sm,
-                  flex: 1
+                  flex: 1,
                 }}
               >
-                <Feather name="map-pin" size={20} color={theme.colors.text} />
-                <Text style={{ fontFamily: "QuicksandMedium", fontSize: 16 }} numberOfLines={1}>
+                <Text
+                  style={{ fontFamily: "QuicksandMedium", fontSize: 16 }}
+                  numberOfLines={1}
+                >
                   {addressToString(address)}
                 </Text>
                 <Feather
@@ -98,7 +103,7 @@ export default function Screen() {
                   color={theme.colors.text}
                 />
               </Pressable>
-              <Pressable
+              {/* <Pressable
                 style={{
                   height: 48,
                   width: 48,
@@ -107,17 +112,47 @@ export default function Screen() {
                 }}
               >
                 <Feather name="filter" size={24} color={theme.colors.text} />
-              </Pressable>
+              </Pressable> */}
             </View>
           )}
-          data={listing}
+          data={formatDataGrid<Listing>(listing, 2)}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View>
-              <Text>{item.product.name}</Text>
+          numColumns={2}
+          contentContainerStyle={
+            listing.length === 0
+              ? { flex: 1 }
+              : { paddingBottom: theme.spacing.lg }
+          }
+          columnWrapperStyle={{
+            paddingHorizontal: theme.spacing.lg,
+            paddingTop: theme.spacing.lg,
+            gap: theme.spacing.lg,
+          }}
+          renderItem={({ item }) => {
+            if (item.empty) return <View style={{ flex: 1 }} />;
+            return <MarketplaceItem {...item} />;
+          }}
+          ListEmptyComponent={
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                padding: theme.spacing.lg,
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: "QuicksandBold",
+                  fontSize: 16,
+                  color: theme.colors.text,
+                }}
+              >
+                Sem produtos para essa localização
+              </Text>
             </View>
-          )}
+          }
         />
       )}
     </View>
