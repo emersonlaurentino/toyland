@@ -53,9 +53,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="marketplace"
         options={{
-          title: "Explorar",
+          title: "Marketplace",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? "compass" : "compass-outline"}
