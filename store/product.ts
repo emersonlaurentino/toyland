@@ -46,13 +46,20 @@ interface State {
   products: Product[];
   productsLoading: boolean;
   deleteProductLoading: boolean;
+  productLoading: boolean;
+  productRefreshing: boolean;
 }
 
 interface Actions {
   resetNewProduct: () => void;
   setNewProductImages: (images: ExpoImagePicker.ImagePickerAsset[]) => void;
   createProduct: (input: z.infer<typeof createProductSchema>) => Promise<void>;
-  fetchProduct: (productId: string) => Promise<void>;
+  fetchProduct: (
+    filters: {
+      productId: string;
+    },
+    refresh?: boolean
+  ) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
 }
 
@@ -64,6 +71,8 @@ const initialState: State = {
   products: [],
   productsLoading: false,
   deleteProductLoading: false,
+  productLoading: false,
+  productRefreshing: false,
 };
 
 export const createProductSlice: StateCreator<
@@ -114,8 +123,13 @@ export const createProductSlice: StateCreator<
       set({ newProductLoading: false });
     }
   },
-  fetchProduct: async (productId) => {
-    set({ productsLoading: true });
+  fetchProduct: async (filters, refresh) => {
+    const { productId } = filters;
+    if (refresh) {
+      set({ productRefreshing: true });
+    } else {
+      set({ productLoading: true });
+    }
     try {
       const response = await apiFetch(
         get,
@@ -133,7 +147,11 @@ export const createProductSlice: StateCreator<
     } catch (error) {
       console.error(error);
     } finally {
-      set({ productsLoading: false });
+      if (refresh) {
+        set({ productRefreshing: false });
+      } else {
+        set({ productLoading: false });
+      }
     }
   },
   deleteProduct: async (productId) => {

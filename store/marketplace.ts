@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { z } from "zod";
 import { StateCreator } from "zustand";
 import { AuthSlice } from "./auth";
-import { Product } from "./product";
+import { Product, ProductSlice } from "./product";
 import { User, UserSlice } from "./user";
 
 export const publishOnMarketplaceSchema = z.object({
@@ -27,6 +27,7 @@ export interface Listing {
 interface State {
   listing: Listing[];
   listingLoading: boolean;
+  listingRefreshing: boolean;
   publishOnMarketplaceLoading: boolean;
 }
 
@@ -35,7 +36,12 @@ interface Actions {
   publishOnMarketplace: (
     input: z.infer<typeof publishOnMarketplaceSchema>
   ) => Promise<void>;
-  fetchListing: (neighborhood: string) => Promise<void>;
+  fetchListing: (
+    filters: {
+      neighborhood: string;
+    },
+    refresh?: boolean
+  ) => Promise<void>;
 }
 
 export type MarketplaceSlice = State & Actions;
@@ -43,11 +49,12 @@ export type MarketplaceSlice = State & Actions;
 const initialState: State = {
   publishOnMarketplaceLoading: false,
   listingLoading: false,
+  listingRefreshing: false,
   listing: [],
 };
 
 export const createMarketplaceSlice: StateCreator<
-  MarketplaceSlice & AuthSlice & UserSlice,
+  MarketplaceSlice & AuthSlice & UserSlice & ProductSlice,
   [],
   [],
   MarketplaceSlice
@@ -73,6 +80,7 @@ export const createMarketplaceSlice: StateCreator<
       const data = await response.json();
 
       await get().fetchUser("refresh");
+      await get().fetchProduct({ productId: input.productId }, true);
 
       router.back();
       router.push({ pathname: "/marketplace/[id]", params: { id: data.id } });
@@ -82,9 +90,14 @@ export const createMarketplaceSlice: StateCreator<
       set({ publishOnMarketplaceLoading: false });
     }
   },
-  fetchListing: async (neighborhood) => {
+  fetchListing: async (filters, refresh) => {
     try {
-      set({ listingLoading: true });
+      const { neighborhood } = filters;
+      if (refresh) {
+        set({ listingRefreshing: true });
+      } else {
+        set({ listingLoading: true });
+      }
 
       const response = await apiFetch(
         get,
@@ -100,7 +113,11 @@ export const createMarketplaceSlice: StateCreator<
     } catch (error) {
       console.error(error);
     } finally {
-      set({ listingLoading: false });
+      if (refresh) {
+        set({ listingRefreshing: false });
+      } else {
+        set({ listingLoading: false });
+      }
     }
   },
   resetMarketplace: () => set(initialState),

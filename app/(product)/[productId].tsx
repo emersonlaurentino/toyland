@@ -23,14 +23,15 @@ const size = screenWidth * 0.7;
 export default function Screen() {
   const { productId, name } = useLocalSearchParams();
   const fetchProduct = useBoundStore((state) => state.fetchProduct);
-  const loading = useBoundStore((state) => state.productsLoading);
+  const loading = useBoundStore((state) => state.productLoading);
+  const refreshing = useBoundStore((state) => state.productRefreshing);
   const product = useBoundStore((state) =>
     state.products.find((p) => p.id === productId)
   );
 
   useEffect(() => {
     if (productId) {
-      fetchProduct(String(productId));
+      fetchProduct({ productId: String(productId) });
     }
   }, [productId]);
 
@@ -75,6 +76,8 @@ export default function Screen() {
       )}
       {product && (
         <SectionList
+          onRefresh={() => fetchProduct({ productId: String(productId) }, true)}
+          refreshing={refreshing}
           sections={[
             {
               title: "Dados do Produto",
