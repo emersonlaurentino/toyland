@@ -3,8 +3,9 @@ import SettingsLogout from "@/components/settings/logout";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { Ionicons } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 import { router } from "expo-router";
-import { Linking, Pressable, SectionList, Text, View } from "react-native";
+import { Pressable, SectionList, Text, View } from "react-native";
 
 const handleEmail = (email: string) => {
   const subject = "Fazer comentários";
@@ -22,10 +23,6 @@ export default function Screen() {
     {
       title: "Conta",
       data: [
-        {
-          title: "Preferências",
-          onAction: () => router.push("/(settings)/preferences"),
-        },
         { title: "Perfil", onAction: () => router.push("/(settings)/profile") },
         {
           title: "Endereços",
@@ -38,7 +35,8 @@ export default function Screen() {
       data: [
         {
           title: "Central de Ajuda",
-          onAction: () => router.push("/(settings)/help"),
+          onAction: () =>
+            Linking.openURL("https://chat.whatsapp.com/CgoEHMMKbfbGMLuf18T2aj"),
         },
         {
           title: "Fazer comentários",
@@ -105,7 +103,7 @@ export default function Screen() {
         ListFooterComponent={
           <View>
             <SettingsLogout />
-            <View style={{ marginTop: theme.spacing.lg }}>
+            {/* <View style={{ marginTop: theme.spacing.lg }}>
               <Text
                 style={{
                   fontFamily: "QuicksandBold",
@@ -126,7 +124,7 @@ export default function Screen() {
               >
                 Política de Privacidade
               </Text>
-            </View>
+            </View> */}
           </View>
         }
         ListFooterComponentStyle={{ marginTop: theme.spacing.lg }}

@@ -2,7 +2,6 @@ import MarketplaceItem from "@/components/marketplace/item";
 import Header from "@/components/navigation/header";
 import theme from "@/constants/theme";
 import useBoundStore from "@/store";
-import { type Address } from "@/store/address";
 import { Listing } from "@/store/marketplace";
 import { formatDataGrid } from "@/utils/format-data-grid";
 import { Feather } from "@expo/vector-icons";
@@ -15,10 +14,6 @@ import {
   Text,
   View,
 } from "react-native";
-
-function addressToString(address: Address) {
-  return `${address.street}, ${address.number}`;
-}
 
 export default function Screen() {
   const address = useBoundStore((state) => state.user?.address);
@@ -44,19 +39,28 @@ export default function Screen() {
   return (
     <View style={{ flex: 1 }}>
       <Header
-        title="Desapega"
+        title="Marketplace"
         action={
           <Pressable
-            // onPress={() => router.push("/(settings)/settings")}
+            onPress={() =>
+              router.push({
+                pathname: "/(settings)/addresses",
+                params: { screen: "marketplace" },
+              })
+            }
             style={{
+              flexDirection: "row",
+              paddingLeft: theme.spacing.lg,
               height: 48,
-              width: 48,
               alignItems: "center",
-              justifyContent: "center",
-              marginRight: -theme.spacing.lg,
+              gap: theme.spacing.sm,
             }}
           >
-            <Feather size={24} name="search" color={theme.colors.text} />
+            <Feather name="map-pin" size={20} color={theme.colors.text} />
+            <Text style={{ fontFamily: "QuicksandBold", fontSize: 16 }}>
+              {address.name}
+            </Text>
+            <Feather name="chevron-down" size={20} color={theme.colors.text} />
           </Pressable>
         }
       />
@@ -72,54 +76,6 @@ export default function Screen() {
             fetchListing({ neighborhood: address.neighborhood }, true)
           }
           refreshing={refreshing}
-          ListHeaderComponent={() => (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Pressable
-                onPress={() =>
-                  router.push({
-                    pathname: "/(settings)/addresses",
-                    params: { screen: "marketplace" },
-                  })
-                }
-                style={{
-                  flexDirection: "row",
-                  paddingHorizontal: theme.spacing.lg,
-                  height: 48,
-                  alignItems: "center",
-                  gap: theme.spacing.sm,
-                  flex: 1,
-                }}
-              >
-                <Text
-                  style={{ fontFamily: "QuicksandMedium", fontSize: 16 }}
-                  numberOfLines={1}
-                >
-                  {addressToString(address)}
-                </Text>
-                <Feather
-                  name="chevron-down"
-                  size={20}
-                  color={theme.colors.text}
-                />
-              </Pressable>
-              {/* <Pressable
-                style={{
-                  height: 48,
-                  width: 48,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Feather name="filter" size={24} color={theme.colors.text} />
-              </Pressable> */}
-            </View>
-          )}
           data={formatDataGrid<Listing>(listing, 2)}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => item.id}
