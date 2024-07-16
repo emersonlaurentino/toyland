@@ -3,7 +3,7 @@ import theme from "@/constants/theme";
 import useBoundStore from "@/store";
 import { type Address } from "@/store/address";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +18,7 @@ function addressToString(address: Address) {
 }
 
 export default function Screen() {
+  const [selected, setSelected] = useState<string | null>(null);
   const { fetchData, data, loading, select, selectLoading } = useBoundStore(
     useShallow((state) => ({
       fetchData: state.fetchAddresses,
@@ -69,7 +70,10 @@ export default function Screen() {
           )}
           renderItem={({ item }) => (
             <Pressable
-              onPress={() => select(item.id)}
+              onPress={() => {
+                setSelected(item.id);
+                select(item.id);
+              }}
               style={{
                 padding: theme.spacing.lg,
                 borderWidth: 2,
@@ -90,7 +94,7 @@ export default function Screen() {
                 <Text style={{ fontFamily: "QuicksandBold", fontSize: 20 }}>
                   {item.name}
                 </Text>
-                {selectLoading ? (
+                {selectLoading && selected === item.id ? (
                   <ActivityIndicator size={24} color={theme.colors.primary} />
                 ) : (
                   item.main && (

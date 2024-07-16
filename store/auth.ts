@@ -102,6 +102,7 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (
       });
       set(() => ({ token: null, user: null }));
       await AsyncStorage.removeItem("auth-store");
+      router.replace("/(auth)/get-started");
     } catch (error) {
       console.error(error);
     } finally {

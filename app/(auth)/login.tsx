@@ -6,6 +6,7 @@ import useBoundStore from "@/store";
 import { loginWithPasswordSchema } from "@/store/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useForm } from "react-hook-form";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -33,6 +34,7 @@ export default function Page() {
       }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <StatusBar style="dark" />
       <Header title="Entrar" canBack />
       <ScrollView
         contentContainerStyle={{

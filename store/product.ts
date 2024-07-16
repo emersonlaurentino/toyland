@@ -102,7 +102,12 @@ export const createProductSlice: StateCreator<
 
       await apiFetch(get, "POST", `/products/${product.id}/images`, formData);
 
-      router.replace("/(tabs)/profile");
+      await get().fetchUser("refresh");
+
+      router.replace({
+        pathname: "/(product)/[productId]",
+        params: { productId: product.id, name: product.name },
+      });
     } catch (error) {
       console.error(error);
     } finally {
