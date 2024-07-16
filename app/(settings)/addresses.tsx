@@ -18,11 +18,13 @@ function addressToString(address: Address) {
 }
 
 export default function Screen() {
-  const { fetchData, data, loading } = useBoundStore(
+  const { fetchData, data, loading, select, selectLoading } = useBoundStore(
     useShallow((state) => ({
       fetchData: state.fetchAddresses,
       data: state.addresses,
       loading: state.addressesLoading,
+      select: state.selectAddress,
+      selectLoading: state.selectAddressLoading,
     }))
   );
 
@@ -66,7 +68,8 @@ export default function Screen() {
             <View style={{ height: theme.spacing.lg }} />
           )}
           renderItem={({ item }) => (
-            <View
+            <Pressable
+              onPress={() => select(item.id)}
               style={{
                 padding: theme.spacing.lg,
                 borderWidth: 2,
@@ -87,12 +90,16 @@ export default function Screen() {
                 <Text style={{ fontFamily: "QuicksandBold", fontSize: 20 }}>
                   {item.name}
                 </Text>
-                {item.main && (
-                  <Ionicons
-                    size={24}
-                    name="checkmark-circle"
-                    color={theme.colors.primary}
-                  />
+                {selectLoading ? (
+                  <ActivityIndicator size={24} color={theme.colors.primary} />
+                ) : (
+                  item.main && (
+                    <Ionicons
+                      size={24}
+                      name="checkmark-circle"
+                      color={theme.colors.primary}
+                    />
+                  )
                 )}
               </View>
               <Text
@@ -104,7 +111,7 @@ export default function Screen() {
               >
                 {addressToString(item)}
               </Text>
-            </View>
+            </Pressable>
           )}
         />
       )}

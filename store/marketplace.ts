@@ -14,7 +14,7 @@ export const publishOnMarketplaceSchema = z.object({
   price: z.number().optional(),
 });
 
-export interface Announcement {
+interface Listing {
   id: string;
   type: string;
   price: number;
@@ -25,8 +25,8 @@ export interface Announcement {
 }
 
 interface State {
-  announcements: Announcement[];
-  fetchAnnouncementLoading: boolean;
+  listing: Listing[];
+  listingLoading: boolean;
   publishOnMarketplaceLoading: boolean;
 }
 
@@ -35,15 +35,15 @@ interface Actions {
   publishOnMarketplace: (
     input: z.infer<typeof publishOnMarketplaceSchema>
   ) => Promise<void>;
-  fetchAnnouncement: (id: string) => Promise<void>;
+  fetchListing: (neighborhood: string) => Promise<void>;
 }
 
 export type MarketplaceSlice = State & Actions;
 
 const initialState: State = {
   publishOnMarketplaceLoading: false,
-  fetchAnnouncementLoading: false,
-  announcements: [],
+  listingLoading: false,
+  listing: [],
 };
 
 export const createMarketplaceSlice: StateCreator<
@@ -82,21 +82,25 @@ export const createMarketplaceSlice: StateCreator<
       set({ publishOnMarketplaceLoading: false });
     }
   },
-  fetchAnnouncement: async (id) => {
+  fetchListing: async (neighborhood) => {
     try {
-      set({ fetchAnnouncementLoading: true });
+      set({ listingLoading: true });
 
-      const response = await apiFetch(get, "GET", `/marketplace/${id}`);
-      if (!response.ok) throw new Error("Anúncio não encontrado");
+      const response = await apiFetch(
+        get,
+        "GET",
+        `/marketplace?n=${neighborhood}`
+      );
+      if (!response.ok) {
+        throw new Error("Não foi possível carregar os anúncios");
+      }
 
-      const data = await response.json();
-      set((state) => ({
-        announcements: [state.announcements.filter((a) => a.id !== id), data],
-      }));
+      const listing = await response.json();
+      set({ listing });
     } catch (error) {
       console.error(error);
     } finally {
-      set({ fetchAnnouncementLoading: false });
+      set({ listingLoading: false });
     }
   },
   resetMarketplace: () => set(initialState),
