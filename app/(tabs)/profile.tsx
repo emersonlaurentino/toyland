@@ -8,83 +8,12 @@ import { Product } from "@/store/product";
 import { formatDataGrid } from "@/utils/format-data-grid";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
 import { FlatList, Pressable, Text, View } from "react-native";
-
-type TabItemProps = {
-  title: string;
-  count?: string;
-  selected?: boolean;
-  onPress?: () => void;
-};
-
-function TabItem({ title, count, selected, onPress }: TabItemProps) {
-  const selectedStyle = selected
-    ? {
-        borderBottomWidth: 3,
-        borderBottomColor: theme.colors.primary,
-      }
-    : {
-        paddingBottom: theme.spacing.md + 1,
-        borderBottomWidth: 2,
-        borderBottomColor: theme.colors.border,
-      };
-
-  return (
-    <Pressable
-      style={{
-        flexDirection: "row",
-        gap: theme.spacing.sm,
-        alignItems: "center",
-        paddingVertical: theme.spacing.md,
-        paddingHorizontal: theme.spacing.lg,
-        ...selectedStyle,
-      }}
-      onPress={onPress}
-    >
-      <Text
-        style={{
-          fontFamily: "QuicksandBold",
-          fontSize: 16,
-        }}
-      >
-        {title}
-      </Text>
-      {count ? (
-        <View
-          style={{
-            backgroundColor: theme.colors.border,
-            paddingVertical: theme.spacing.xs,
-            paddingHorizontal: theme.spacing.sm,
-            borderRadius: theme.spacing.sm,
-          }}
-        >
-          <Text style={{ fontFamily: "QuicksandBold", fontSize: 16 }}>
-            {count}
-          </Text>
-        </View>
-      ) : null}
-    </Pressable>
-  );
-}
-
-const TABS: { [key: string]: string } = {
-  inventory: "Inventário",
-  givingAway: "Desapegando",
-  history: "Histórico",
-};
 
 export default function Screen() {
   const user = useBoundStore((state) => state.user);
-  const [selectedTab, setSelectedTab] = useState("inventory");
   const fetchUser = useBoundStore((state) => state.fetchUser);
   const userLoading = useBoundStore((state) => state.userLoading);
-
-  const tabs = Object.keys(user?.products || {}).map((key) => ({
-    id: key,
-    title: TABS[key],
-    count: String((user?.products as any)[key].length),
-  }));
 
   return (
     <View style={{ flex: 1 }}>
@@ -140,28 +69,12 @@ export default function Screen() {
             </View>
 
             <NewProduct />
-
-            <FlatList
-              contentContainerStyle={{ paddingHorizontal: theme.spacing.lg }}
-              data={tabs}
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.id}
-              horizontal
-              renderItem={({ item }) => (
-                <TabItem
-                  title={item.title}
-                  count={item.count}
-                  selected={selectedTab === item.id}
-                  onPress={() => setSelectedTab(item.id)}
-                />
-              )}
-            />
           </View>
         }
-        data={formatDataGrid<Product>((user?.products as any)[selectedTab], 2)}
+        data={formatDataGrid<Product>(user?.products as any, 2)}
         numColumns={2}
         contentContainerStyle={
-          tabs.find((item) => item.id === selectedTab)?.count === "0"
+          user?.products.length === 0
             ? { flex: 1 }
             : { paddingBottom: theme.spacing.lg }
         }
@@ -191,9 +104,7 @@ export default function Screen() {
                 color: theme.colors.text,
               }}
             >
-              {`Nenhum produto ${
-                selectedTab === "givingAway" ? "para desapegar" : ""
-              }`}
+              Nenhum Produto Cadastrado
             </Text>
           </View>
         }

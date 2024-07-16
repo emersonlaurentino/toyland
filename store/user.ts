@@ -11,14 +11,8 @@ export interface User {
   name: string;
   email: string;
   imageUrl: string | null;
-  products: Products;
+  products: Product[];
   address: Address;
-}
-
-interface Products {
-  inventory: Product[];
-  givingAway: Product[];
-  history: Product[];
 }
 
 interface State {
