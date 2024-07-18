@@ -18,13 +18,13 @@ import {
 export default function Screen() {
   const address = useBoundStore((state) => state.user?.address);
   const listing = useBoundStore((state) => state.listing);
-  const refreshing = useBoundStore((state) => state.listingRefreshing);
-  const fetchListing = useBoundStore((state) => state.fetchListing);
-  const loading = useBoundStore((state) => state.listingLoading);
+  const refreshing = useBoundStore((state) => state.fetchMarketplaceRefreshing);
+  const fetchMarketplace = useBoundStore((state) => state.fetchMarketplace);
+  const loading = useBoundStore((state) => state.fetchMarketplaceLoading);
 
   useEffect(() => {
     if (address) {
-      fetchListing({ neighborhood: address.neighborhood });
+      fetchMarketplace({ neighborhood: address.neighborhood });
     }
   }, [address]);
 
@@ -73,7 +73,7 @@ export default function Screen() {
       ) : (
         <FlatList
           onRefresh={() =>
-            fetchListing({ neighborhood: address.neighborhood }, true)
+            fetchMarketplace({ neighborhood: address.neighborhood }, true)
           }
           refreshing={refreshing}
           data={formatDataGrid<Listing>(listing, 2)}

@@ -23,7 +23,7 @@ export default function ProfileImage({ size = 72, source, alt }: Props) {
     >
       <Text
         style={{
-          fontSize: 24,
+          fontSize: size / 2,
           fontWeight: "bold",
         }}
       >

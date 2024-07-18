@@ -10,7 +10,7 @@ function MarketplaceItem(listing: Listing) {
       onPress={() =>
         router.push({
           pathname: "/marketplace/[id]",
-          params: { id: listing.id },
+          params: { id: listing.id, type: listing.type },
         })
       }
       style={{

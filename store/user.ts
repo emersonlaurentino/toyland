@@ -10,6 +10,7 @@ export interface User {
   updatedAt: string;
   name: string;
   email: string;
+  phone: string | null;
   imageUrl: string | null;
   products: Product[];
   address: Address;

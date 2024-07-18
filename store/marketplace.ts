@@ -26,8 +26,10 @@ export interface Listing {
 
 interface State {
   listing: Listing[];
-  listingLoading: boolean;
-  listingRefreshing: boolean;
+  fetchListingLoading: boolean;
+  fetchListingRefreshing: boolean;
+  fetchMarketplaceLoading: boolean;
+  fetchMarketplaceRefreshing: boolean;
   publishOnMarketplaceLoading: boolean;
 }
 
@@ -36,20 +38,21 @@ interface Actions {
   publishOnMarketplace: (
     input: z.infer<typeof publishOnMarketplaceSchema>
   ) => Promise<void>;
-  fetchListing: (
-    filters: {
-      neighborhood: string;
-    },
+  fetchMarketplace: (
+    filters: { neighborhood: string },
     refresh?: boolean
   ) => Promise<void>;
+  fetchListing: (filters: { id: string }, refresh?: boolean) => Promise<void>;
 }
 
 export type MarketplaceSlice = State & Actions;
 
 const initialState: State = {
   publishOnMarketplaceLoading: false,
-  listingLoading: false,
-  listingRefreshing: false,
+  fetchMarketplaceLoading: false,
+  fetchMarketplaceRefreshing: false,
+  fetchListingLoading: false,
+  fetchListingRefreshing: false,
   listing: [],
 };
 
@@ -83,20 +86,23 @@ export const createMarketplaceSlice: StateCreator<
       await get().fetchProduct({ productId: input.productId }, true);
 
       router.back();
-      router.push({ pathname: "/marketplace/[id]", params: { id: data.id } });
+      router.push({
+        pathname: "/marketplace/[id]",
+        params: { id: data.id, type: data.type },
+      });
     } catch (error) {
       console.error(error);
     } finally {
       set({ publishOnMarketplaceLoading: false });
     }
   },
-  fetchListing: async (filters, refresh) => {
+  fetchMarketplace: async (filters, refresh) => {
     try {
       const { neighborhood } = filters;
       if (refresh) {
-        set({ listingRefreshing: true });
+        set({ fetchMarketplaceRefreshing: true });
       } else {
-        set({ listingLoading: true });
+        set({ fetchMarketplaceLoading: true });
       }
 
       const response = await apiFetch(
@@ -114,9 +120,37 @@ export const createMarketplaceSlice: StateCreator<
       console.error(error);
     } finally {
       if (refresh) {
-        set({ listingRefreshing: false });
+        set({ fetchMarketplaceRefreshing: false });
       } else {
-        set({ listingLoading: false });
+        set({ fetchMarketplaceLoading: false });
+      }
+    }
+  },
+  fetchListing: async (filters, refresh) => {
+    const { id } = filters;
+    try {
+      if (refresh) {
+        set({ fetchListingRefreshing: true });
+      } else {
+        set({ fetchListingLoading: true });
+      }
+
+      const response = await apiFetch(get, "GET", `/marketplace/${id}`);
+      if (!response.ok) {
+        throw new Error("Não foi possível carregar o anúncio");
+      }
+
+      const data = await response.json();
+      set((state) => ({
+        listing: [...state.listing.filter((l) => l.id !== data.id), data],
+      }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      if (refresh) {
+        set({ fetchListingRefreshing: false });
+      } else {
+        set({ fetchListingLoading: false });
       }
     }
   },

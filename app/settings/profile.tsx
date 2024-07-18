@@ -1,6 +1,7 @@
 import Header from "@/components/navigation/header";
 import DeleteAccount from "@/components/settings/delete-account";
 import EditName from "@/components/settings/edit-name";
+import EditPhone from "@/components/settings/edit-phone";
 import ImagePicker from "@/components/settings/image-picker";
 import theme from "@/constants/theme";
 import { useState } from "react";
@@ -46,6 +47,7 @@ export default function Screen() {
         >
           <ImagePicker setLoading={setLoading} />
           <EditName setLoading={setLoading} />
+          <EditPhone setLoading={setLoading} />
           <DeleteAccount />
         </ScrollView>
       </KeyboardAvoidingView>
